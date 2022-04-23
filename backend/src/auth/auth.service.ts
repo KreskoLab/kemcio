@@ -17,14 +17,14 @@ export class AuthService {
   async generateAccessToken(payload: object): Promise<string> {
     return this.jwtService.signAsync(payload, {
       secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
-      expiresIn: '2m',
+      expiresIn: this.configService.get<string>('ACCESS_TOKEN_LIFETIME'),
     });
   }
 
   async generateRefreshToken(payload: object): Promise<string> {
     return this.jwtService.signAsync(payload, {
       secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
-      expiresIn: '7d',
+      expiresIn: this.configService.get<string>('REFRESH_TOKEN_LIFETIME'),
       jwtid: uuidv4(),
     });
   }
