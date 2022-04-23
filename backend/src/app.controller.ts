@@ -76,21 +76,34 @@ export class AppController {
   }
 
   @Get('me')
-  getUser(
+  async getUser(
     @Headers('Authorization') jwtHeader: string,
     @Headers('user-agent') userAgent: string,
     @RealIP() ip: string,
     @Req() request: Request,
-  ): Promise<UserInterface | UserAndTokensInterface> {
-    const refreshToken = request.cookies['refreshToken'];
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<UserAndTokensInterface> {
+    const refreshTokenHeader = request.cookies['refreshToken'];
 
-    if (jwtHeader && userAgent && refreshToken) {
-      return this.userService.getUserData(
+    if (refreshTokenHeader) {
+      const res = await this.userService.getUserData(
         jwtHeader,
         userAgent,
         ip,
-        refreshToken,
+        refreshTokenHeader,
       );
+
+      if (res.tokens) {
+        response.cookie('refreshToken', res.tokens.refreshToken, {
+          httpOnly: true,
+          sameSite: 'strict',
+          secure: true,
+          maxAge: this.configService.get<number>('REFRESH_TOKEN_LIFETIME'),
+          domain: this.configService.get<string>('FRONTEND_DOMAIN'),
+        });
+      }
+
+      return res;
     } else {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }

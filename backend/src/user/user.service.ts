@@ -90,8 +90,8 @@ export class UserService {
     userAgent: string,
     ip: string,
     refreshToken: string,
-  ): Promise<UserInterface | UserAndTokensInterface> {
-    const accessToken = jwtHeader.replace('Bearer', '').trim();
+  ): Promise<UserAndTokensInterface> {
+    const accessToken = jwtHeader ? jwtHeader.replace('Bearer', '').trim() : '';
 
     const validRefreshToken = await this.authService.verifyRefreshToken(
       refreshToken,
@@ -132,7 +132,12 @@ export class UserService {
         }
 
         if (validAccessToken && tokensMatch && deviceMatch) {
-          return { id: user._id, login: user.login, name: user.name };
+          const newUser: UserInterface = {
+            id: user._id,
+            login: user.login,
+            name: user.name,
+          };
+          return { user: newUser };
         }
 
         if (!validAccessToken && tokensMatch && deviceMatch) {
