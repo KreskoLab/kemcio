@@ -16,6 +16,7 @@
 		"vite-plugin-windicss": "^1.8.3",
 		"vue": "^3.2.25",
 		"vue-axios": "^3.4.1",
+		"vue-cookies": "^1.8.0",
 		"vue-router": "4"
 	},
 	"devDependencies": {
