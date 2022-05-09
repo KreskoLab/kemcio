@@ -1,0 +1,49 @@
+[
+  {
+    "name": "Sonoff S20",
+    "slug": "sonoff-s20",
+    "vendor": "sonoff",
+    "value": "SONOFF_BASIC",
+    "type": "plug"
+  },
+
+  {
+    "name": "Sonoff S26",
+    "slug": "sonoff-s26",
+    "vendor": "sonoff",
+    "value": "SONOFF_BASIC",
+    "type": "plug"
+  },
+
+  {
+    "name": "Sonoff Basic",
+    "slug": "sonoff-basic",
+    "vendor": "sonoff",
+    "value": "SONOFF_BASIC",
+    "type": "switch"
+  },
+
+  {
+    "name": "Sonoff Basic R2",
+    "slug": "sonoff-basic-r2",
+    "vendor": "sonoff",
+    "value": "SONOFF_BASIC",
+    "type": "switch"
+  },
+
+  {
+    "name": "Sonoff B1",
+    "slug": "sonoff-b1",
+    "vendor": "sonoff",
+    "value": "SONOFF_B1",
+    "type": "bulb"
+  },
+
+  {
+    "name": "Sonoff Touch",
+    "slug": "sonoff-touch",
+    "vendor": "sonoff",
+    "value": "SONOFF_TOUCH",
+    "type": "bulb"
+  }
+]
