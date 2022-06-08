@@ -1,0 +1,27 @@
+[
+	{
+		"name": "ssid",
+		"label": "Назва",
+		"placeholder": "Назва WiFi мережі",
+		"component": "AppInput",
+		"validations": {
+			"required": {
+				"params": null,
+				"message": "Введіть назву WiFi мережі"
+			}
+		}
+	},
+
+	{
+		"name": "pass",
+		"label": "Пароль",
+		"placeholder": "Пароль WiFi мережі",
+		"component": "AppInput",
+		"validations": {
+			"required": {
+				"params": null,
+				"message": "Введіть пароль WiFi мережі"
+			}
+		}
+	}
+]
