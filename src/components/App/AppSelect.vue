@@ -81,7 +81,7 @@ import { computed } from '@vue/reactivity'
 import { OptionModel } from '@/models/option-model'
 
 const props = defineProps<{
-	label: string
+	label?: string
 	placeholder: string
 	options: Array<OptionModel>
 	modelValue?: object | string
@@ -90,7 +90,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-	(e: 'update:modelValue', value: object | string): void
+	(e: 'update:modelValue', value: object | string | number): void
 }>()
 
 const target = ref<HTMLElement | null>(null)
