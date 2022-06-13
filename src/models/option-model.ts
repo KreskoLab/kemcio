@@ -1,4 +1,4 @@
 export type OptionModel = {
-	value: string | object
+	value: string | number | object
 	label: string
 }

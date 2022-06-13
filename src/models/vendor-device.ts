@@ -3,4 +3,5 @@ export type VendorDevice = {
 	slug: string
 	type: string
 	value: string
+	gpio?: string
 }
