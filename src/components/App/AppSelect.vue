@@ -1,3 +1,49 @@
+<script
+	setup
+	lang="ts"
+>
+import { reactive, ref, Ref } from 'vue'
+import { onClickOutside } from '@vueuse/core'
+import { computed } from '@vue/reactivity'
+import { OptionModel } from '@/models/option-model'
+
+const props = defineProps<{
+	label?: string
+	placeholder: string
+	options: Array<OptionModel>
+	modelValue?: object | string | number | boolean
+	error?: boolean
+	errorMessage?: string | Ref<string>
+}>()
+
+const emit = defineEmits<{
+	(e: 'update:modelValue', value: object | string | number): void
+}>()
+
+const target = ref<HTMLElement | null>(null)
+const active = ref<boolean>(false)
+
+const selected = reactive<OptionModel>({ value: '', label: '' })
+
+if (props.modelValue) {
+	const option = props.options.find((option) => option.value === props.modelValue)
+	if (option) Object.assign(selected, option)
+}
+
+const display = computed(() => {
+	return selected.label.length ? selected.label : props.placeholder
+})
+
+onClickOutside(target, () => (active.value = false))
+
+function select(option: OptionModel) {
+	Object.assign(selected, option)
+	active.value = false
+
+	emit('update:modelValue', option.value)
+}
+</script>
+
 <template>
 	<div class="flex flex-col space-y-3">
 		<label class="text-lg dark:text-gray-300">{{ label }}</label>
@@ -71,48 +117,8 @@
 	</div>
 </template>
 
-<script
-	setup
-	lang="ts"
->
-import { reactive, ref, Ref } from 'vue'
-import { onClickOutside } from '@vueuse/core'
-import { computed } from '@vue/reactivity'
-import { OptionModel } from '@/models/option-model'
-
-const props = defineProps<{
-	label?: string
-	placeholder: string
-	options: Array<OptionModel>
-	modelValue?: object | string
-	error?: boolean
-	errorMessage?: string | Ref<string>
-}>()
-
-const emit = defineEmits<{
-	(e: 'update:modelValue', value: object | string | number): void
-}>()
-
-const target = ref<HTMLElement | null>(null)
-const active = ref<boolean>(false)
-
-const selected = reactive<OptionModel>({ value: '', label: '' })
-
-if (props.modelValue) {
-	const option = props.options.find((option) => option.value === props.modelValue)
-	if (option) Object.assign(selected, option)
+<style scoped>
+ul {
+	@apply scrollbar-thin scrollbar-thumb-gray-100 scrollbar-track-gray-200 dark:scrollbar-thumb-dark-300 dark:scrollbar-track-dark-600;
 }
-
-const display = computed(() => {
-	return selected.label.length ? selected.label : props.placeholder
-})
-
-onClickOutside(target, () => (active.value = false))
-
-function select(option: OptionModel) {
-	Object.assign(selected, option)
-	active.value = false
-
-	emit('update:modelValue', option.value)
-}
-</script>
+</style>
