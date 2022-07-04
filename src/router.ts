@@ -3,31 +3,73 @@ import { auth } from './middlewares/auth'
 
 const routes: Array<RouteRecordRaw> = [
 	{
-		path: '/devices',
-		name: 'devices',
-		// beforeEnter: auth,
+		path: '/',
+		name: 'index',
+		beforeEnter: auth,
 		components: {
-			default: () => import('@/pages/devices.vue'),
-			SideNav: () => import('@/components/SideNav/SideNav.vue'),
+			default: () => import('@/pages/index.vue'),
+			Sidenav: () => import('@/components/TheSidenav.vue'),
+			Navbar: () => import('@/components/TheNavbar.vue')
 		},
 	},
+
+	{
+		path: '/workflows',
+		name: 'workflows',
+		beforeEnter: auth,
+		components: {
+			default: () => import('@/pages/workflows/index.vue'),
+			Sidenav: () => import('@/components/TheSidenav.vue'),
+			Navbar: () => import('@/components/TheNavbar.vue')
+		},
+	},
+
 	{
 		path: '/settings',
 		name: 'settings',
 		beforeEnter: auth,
 		components: {
-			default: () => import('@/pages/settings.vue'),
-			SideNav: () => import('@/components/SideNav/SideNav.vue'),
+			default: () => import('@/pages/settings/index.vue'),
+			Sidenav: () => import('@/components/TheSidenav.vue'),
+			Navbar: () => import('@/components/TheNavbar.vue')
 		},
+		children: [
+			{
+				path: 'user',
+				components: {
+					default: () => import('@/pages/settings/user.vue'),
+				},
+			},
+			{
+				path: 'users',
+				components: {
+					default: () => import('@/pages/settings/users.vue'),
+				},
+			}
+		]
 	},
+
 	{
-		path: '/:page/new',
-		name: 'new',
+		path: '/new',
+		name: 'devices-new',
 		components: {
 			default: () => import('@/pages/new.vue'),
-			SideNav: () => import('@/components/SideNav/SideNav.vue'),
+			Sidenav: () => import('@/components/TheSidenav.vue'),
+			Navbar: () => import('@/components/TheNavbar.vue')
 		},
 	},
+
+	{
+		path: '/workflows/:id',
+		name: 'workflows-id',
+		beforeEnter: auth,
+		components: {
+			default: () => import('@/pages/workflows/id.vue'),
+			Sidenav: () => import('@/components/TheSidenav.vue'),
+			Navbar: () => import('@/components/TheNavbar.vue')
+		},
+	},
+
 	{
 		path: '/login',
 		name: 'login',
