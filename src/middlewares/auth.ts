@@ -9,7 +9,8 @@ export async function auth(to: RouteLocationNormalized, from: RouteLocationNorma
 		next()
 	} else {
 		try {
-			await userStore.getUserData()
+			await userStore.getAccessToken()
+			await userStore.getUser()
 			next()
 		} catch (err) {
 			next('/login')
