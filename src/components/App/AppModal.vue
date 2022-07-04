@@ -4,20 +4,20 @@
 >
 import { onMounted, ref } from 'vue'
 
-type Size = 'base' | 'lg'
+type Size = 'base' | 'md' | 'lg'
 
 interface Props {
 	size: Size
 }
 
-// eslint-disable-next-line vue/no-setup-props-destructure
-const { size = 'base' } = defineProps<Props>()
+defineProps<Props>()
 const emit = defineEmits(['close'])
 
 const show = ref<boolean>(false)
 
 function close() {
 	show.value = false
+
 	setTimeout(() => {
 		emit('close')
 	}, 500)
@@ -35,8 +35,8 @@ onMounted(() => (show.value = true))
 			>
 				<div
 					v-if="show"
-					class="flex flex-col space-y-4 rounded-3xl dark:bg-dark-600 px-8 py-6"
-					:class="[{ 'min-w-96': size === 'base' }, { 'w-lg': size === 'lg' }]"
+					class="flex flex-col space-y-4 rounded-3xl bg-light-100 dark:bg-dark-600 px-8 py-6"
+					:class="[{ 'max-w-sm': size === 'base' }, { 'w-sm': size === 'md' }, { 'w-lg': size === 'lg' }]"
 				>
 					<section class="flex justify-between items-center">
 						<div>
@@ -44,7 +44,7 @@ onMounted(() => (show.value = true))
 						</div>
 
 						<button @click="close()">
-							<i-lucide-x-circle class="text-light-600" />
+							<i-lucide-x-circle class="text-gray-600 dark:text-light-600" />
 						</button>
 					</section>
 
