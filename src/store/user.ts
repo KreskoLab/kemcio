@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios, { AxiosError } from 'axios'
+import router from '@/router'
 
 export const useUser = defineStore('user', {
 	state: () => {
@@ -15,22 +16,12 @@ export const useUser = defineStore('user', {
 	actions: {
 		async logIn(login: string, password: string): Promise<string> {
 			try {
-				const res = await axios.post(
-					`${import.meta.env.VITE_API}/users/login`,
-					{
+				await axios
+					.post<string>('/auth/login', {
 						login,
 						password,
-					},
-					{
-						withCredentials: true,
-						headers: {
-							'Content-Type': 'application/json',
-						},
-					}
-				)
-
-				this.setAccessToken(res.data.accessToken)
-				await this.getUserData()
+					})
+					.then((res) => this.setAccessToken(res.data))
 
 				return 'ok'
 			} catch (error) {
@@ -41,35 +32,54 @@ export const useUser = defineStore('user', {
 			}
 		},
 
-		async getUserData() {
-			const res = await axios.get(`${import.meta.env.VITE_API}/users/me`, {
-				withCredentials: true,
-				headers: {
-					Authorization: `Bearer ${this.accessToken}`,
-				},
-			})
+		async getUser() {
+			await axios
+				.post('/auth/me')
+				.then((res) => {
+					this._id = res.data._id
+					this.name = res.data.name
+					this.login = res.data.login
 
-			console.log(res)
+					this.setLoggedIn(true)
+				})
+				.catch(() => {
+					this.setLoggedIn(false)
+					router.push('/login')
+				})
+		},
 
-			if (res.data.user) {
-				this._id = res.data.user._id
-				this.name = res.data.user.name
-				this.login = res.data.user.login
-
-				if (res.data.accessToken) {
-					this.setAccessToken(res.data.accessToken)
-				}
-
-				this.setLoggedIn(true)
+		async getAccessToken() {
+			try {
+				await axios.post<string>('/auth/token').then((res) => {
+					this.setAccessToken(res.data)
+					this.refreshAccessToken()
+				})
+			} catch (error) {
+				this.setLoggedIn(false)
+				router.push('/login')
 			}
 		},
 
 		setAccessToken(token: string) {
 			this.accessToken = token
+			axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 		},
 
 		setLoggedIn(val: boolean) {
 			this.loggedIn = val
+		},
+
+		refreshAccessToken() {
+			const interval = 3500000 // ~ 1h
+
+			setInterval(async () => {
+				try {
+					await this.getAccessToken()
+				} catch (error) {
+					this.setLoggedIn(false)
+					router.push('/login')
+				}
+			}, interval)
 		},
 	},
 })
