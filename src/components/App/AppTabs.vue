@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { computed } from '@vue/reactivity'
 import { onMounted, provide, ref, useSlots } from 'vue'
 
@@ -32,11 +29,11 @@ provide('activeTab', activeTab)
 </script>
 
 <template>
-	<ul class="flex space-x-8 pb-2 border-b-2 border-dark-200">
+	<ul class="flex space-x-8 pb-2 border-b-2 border-gray-200 dark:border-dark-200">
 		<li
 			v-for="(tab, index) in tabs"
 			:key="tab.props?.label"
-			class="dark:text-gray-400 cursor-pointer"
+			class="subtitle text-base cursor-pointer"
 			:class="{ '!dark:text-light-200': tab.props?.label === activeTab }"
 			@click="selectTab(index)"
 		>
