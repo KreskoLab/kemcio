@@ -1,13 +1,10 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import SidenavItem from '@/components/SidenavItem.vue'
 import AppColorToggle from '@/components/App/AppColorToggle.vue'
 </script>
 
 <template>
-	<nav class="fixed bottom-0 w-full py-2 px-6 sm:(pt-8 pb-12 px-2 w-20 h-full) z-50">
+	<nav class="fixed bottom-0 w-full py-2 px-6 sm:(pt-8 pb-12 px-2 w-20 h-full) z-20">
 		<router-link
 			class="hidden sm:(flex justify-center)"
 			to="/"
