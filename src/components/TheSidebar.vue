@@ -3,7 +3,7 @@
 	lang="ts"
 >
 import AppBlock from '@/components/App/AppBlock.vue'
-import type { Block } from '@/models/models'
+import type { Block } from '@/models'
 import { useBlocks } from '@/store/blocks'
 import { computed } from '@vue/reactivity'
 
@@ -19,7 +19,9 @@ function startDrag(event: DragEvent, block: Block) {
 </script>
 
 <template>
-	<div class="h-full w-sm overflow-y-scroll px-4 py-8">
+	<div
+		class="h-full w-sm overflow-y-scroll px-4 py-8 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-light-400 dark:scrollbar-thumb-light-800 dark:scrollbar-track-dark-600"
+	>
 		<h2 class="title text-xl">Компонети</h2>
 
 		<div class="my-6">
