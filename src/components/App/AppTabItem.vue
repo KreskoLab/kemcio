@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { computed } from '@vue/reactivity'
 import { inject, Ref } from 'vue'
 
@@ -14,7 +11,7 @@ const active = computed(() => props.label === activeTab?.value)
 </script>
 
 <template>
-	<div v-show="active">
+	<div v-if="active">
 		<slot />
 	</div>
 </template>
