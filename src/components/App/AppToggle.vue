@@ -1,20 +1,4 @@
-<template>
-	<div
-		class="inline-block relative rounded-full w-12 h-6 transition-colors duration-300 delay-75 ease cursor-pointer"
-		:class="[background, { '!cursor-not-allowed': disabled }]"
-		@click="!disabled ? toggle() : ''"
-	>
-		<span
-			class="absolute inset-y-1 left-1 rounded-full bg-light-100 w-4 h-4 transform duration-300 ease"
-			:class="transition"
-		/>
-	</div>
-</template>
-
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { computed } from 'vue'
 
 const props = defineProps<{
@@ -51,3 +35,16 @@ function toggle() {
 	else state.value = computedTrue.value
 }
 </script>
+
+<template>
+	<div
+		class="inline-block relative rounded-full w-12 h-6 transition-colors duration-300 delay-75 ease cursor-pointer"
+		:class="[background, { '!cursor-not-allowed !bg-dark-100 dark:!bg-dark-200 opacity-80': disabled }]"
+		@click="!disabled ? toggle() : ''"
+	>
+		<span
+			class="absolute inset-y-1 left-1 rounded-full bg-light-100 w-4 h-4 transform duration-300 ease"
+			:class="transition"
+		/>
+	</div>
+</template>
