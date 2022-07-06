@@ -8,6 +8,9 @@ import type { Block } from '@/models/block'
 import type { NodeData } from '@/models/node'
 import type { Workflow } from '@/models/workflow'
 import type { User } from '@/models/user'
+import type { ElementData, ElementsData } from '@/models/element-data'
+import type { Period } from '@/models/period'
+import type { ModalSize } from '@/models/modal-size'
 
 export type {
 	Vendor,
@@ -21,4 +24,8 @@ export type {
 	NodeData,
 	Workflow,
 	User,
+	ElementData,
+	ElementsData,
+	Period,
+	ModalSize,
 }
