@@ -1,18 +1,65 @@
+<script
+	setup
+	lang="ts"
+>
+import AppInput from '@/components/App/AppInput.vue'
+import AppButton from '@/components/App/AppButton.vue'
+import UIToast from '@/components/UI/UIToast.vue'
+import useVuelidate from '@vuelidate/core'
+import { ref, computed, reactive } from 'vue'
+import { useUser } from '@/store/user'
+import { useRouter } from 'vue-router'
+import { useValidation } from '@/composables/validation'
+import { useLoginForm } from '@/forms/login'
+
+const router = useRouter()
+
+const form = reactive({
+	login: '',
+	password: '',
+})
+
+const validationRules = computed(() => useValidation(useLoginForm()))
+const v$ = useVuelidate(validationRules, form)
+
+const toast = ref<InstanceType<typeof UIToast>>()
+
+const userStore = useUser()
+
+async function logIn() {
+	v$.value.$validate()
+
+	if (!v$.value.$error) {
+		const res = await userStore.logIn(form.login, form.password)
+
+		if (res === 'ok') {
+			userStore.refreshAccessToken()
+			await userStore.getUser()
+
+			router.push('/')
+		} else {
+			toast.value?.err(res)
+		}
+	}
+}
+</script>
+
 <template>
-	<div class="flex justify-center bg-gradient-to-br from-slate-900 via-slate-600 to-slate-900 h-full w-full">
+	<div class="flex justify-center radial h-full !pl-0">
 		<UIToast ref="toast" />
 
 		<form
-			class="flex flex-col absolute top-1/5 min-w-[320px] w-full px-6 py-4 pb-12 sm:(w-1/3 px-16 pt-2 pb-14) bg-light-200 rounded-xl transition-all duration-300 ease-in-out"
+			class="flex flex-col space-y-4 lg:space-y-6 bg-white"
 			@submit.prevent
 		>
-			<div class="mx-auto">
-				<LogoType />
-			</div>
+			<img
+				src="@/assets/logo.svg"
+				class="w-10 h-10 mx-auto"
+			/>
 
-			<div class="text-base text-gray-600">
+			<div class="text-gray-700">
 				<AppInput
-					v-model="login"
+					v-model="form.login"
 					label="Логін"
 					placeholder="Ваш логін"
 					:error="v$.login.$errors[0] ? true : false"
@@ -24,9 +71,9 @@
 				</AppInput>
 			</div>
 
-			<div class="mt-4 text-base text-gray-600">
+			<div class="mt-4 text-gray-700">
 				<AppInput
-					v-model="password"
+					v-model="form.password"
 					label="Пароль"
 					placeholder="Ваш пароль"
 					password
@@ -46,54 +93,15 @@
 	</div>
 </template>
 
-<script
-	setup
-	lang="ts"
->
-import AppInput from '@/components/App/AppInput.vue'
-import LogoType from '@/components/LogoType.vue'
-import AppButton from '@/components/App/AppButton.vue'
-import UIToast from '@/components/UI/UIToast.vue'
-import useVuelidate from '@vuelidate/core'
-import { required, minLength, helpers } from '@vuelidate/validators'
-import { ref, computed } from 'vue'
-import { useUser } from '@/store/user'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const login = ref<string>('')
-const password = ref<string>('')
-
-const toast = ref<InstanceType<typeof UIToast>>()
-
-const passwordMinLength = ref(6)
-
-const rules = computed(() => ({
-	login: {
-		required: helpers.withMessage('Введіть логін', required),
-	},
-	password: {
-		required: helpers.withMessage('Введіть пароль', required),
-		minLength: minLength(passwordMinLength.value),
-	},
-}))
-
-const v$ = useVuelidate(rules, { login, password })
-
-const userStore = useUser()
-
-async function logIn() {
-	v$.value.$validate()
-
-	if (!v$.value.$error) {
-		const res = await userStore.logIn(login.value, password.value)
-
-		if (res === 'ok') {
-			router.push('/devices')
-		} else {
-			toast.value?.err(res)
-		}
-	}
+<style scoped>
+form {
+	@apply transition-all duration-300 ease-in-out
+	min-w-[320px] w-full h-full
+	md:(absolute top-1/5 w-1/3 h-max px-16 pt-8 pb-12 rounded-xl)
+	px-6 pt-32 pb-12;
 }
-</script>
+
+.radial {
+	background: radial-gradient(circle, #4c1d95 -50%, #181818 55%);
+}
+</style>
