@@ -10,7 +10,7 @@ const emit = defineEmits<{
 	(event: 'update:modelValue', tab: number): void
 }>()
 
-let slots = useSlots()
+const slots = useSlots()
 
 const tabs = computed(() => slots['default'] && slots['default']().filter((item) => item.children !== 'v-if'))
 const activeTab = ref<string>('')
@@ -29,7 +29,9 @@ provide('activeTab', activeTab)
 </script>
 
 <template>
-	<ul class="flex space-x-8 pb-2 border-b-2 border-gray-200 dark:border-dark-200">
+	<ul
+		class="flex space-x-4 sm:(space-x-0) justify-around pb-3 border-b-2 border-gray-200 dark:border-dark-200 overflow-x-auto"
+	>
 		<li
 			v-for="(tab, index) in tabs"
 			:key="tab.props?.label"
