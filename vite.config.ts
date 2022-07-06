@@ -8,7 +8,9 @@ import * as path from 'path'
 
 export default defineConfig({ 
   plugins: [
-    vue(), 
+    vue({
+      reactivityTransform: true
+    }), 
     WindiCSS(), 
     Components({
       resolvers: [
