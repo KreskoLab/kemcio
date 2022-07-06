@@ -1,13 +1,9 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
+import { ModalSize } from '@/models'
 import { onMounted, ref } from 'vue'
 
-type Size = 'base' | 'md' | 'lg'
-
 interface Props {
-	size: Size
+	size: ModalSize
 }
 
 defineProps<Props>()
@@ -35,8 +31,13 @@ onMounted(() => (show.value = true))
 			>
 				<div
 					v-if="show"
-					class="flex flex-col space-y-4 rounded-3xl bg-light-100 dark:bg-dark-600 px-8 py-6"
-					:class="[{ 'max-w-sm': size === 'base' }, { 'w-sm': size === 'md' }, { 'w-lg': size === 'lg' }]"
+					class="flex flex-col space-y-5 h-full w-full py-24 sm:(rounded-3xl pb-4 h-max) bg-light-100 dark:bg-dark-600 px-8 overflow-y-auto"
+					:class="[
+						{ 'max-w-sm': size === 'base' },
+						{ '!sm:(max-h-[460px] w-md py-8)': size === 'md' },
+						{ '!sm:(max-h-[580px] w-lg pt-8)': size === 'lg' },
+						{ '!sm:(max-h-[720px] w-2xl pt-6)': size === 'xl' },
+					]"
 				>
 					<section class="flex justify-between items-center">
 						<div>
