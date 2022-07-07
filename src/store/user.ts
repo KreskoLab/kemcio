@@ -32,6 +32,17 @@ export const useUser = defineStore('user', {
 			}
 		},
 
+		async logOut(): Promise<void> {
+			try {
+				await axios.post<string>('/auth/logout')
+			} catch (error) {}
+
+			this.accessToken = ''
+			this.loggedIn = false
+
+			router.push('/login')
+		},
+
 		async getUser() {
 			await axios
 				.post('/auth/me')

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import SidenavItem from '@/components/SidenavItem.vue'
 import AppColorToggle from '@/components/App/AppColorToggle.vue'
+import { useUser } from '@/store/user'
+
+const userStore = useUser()
 </script>
 
 <template>
@@ -21,20 +24,23 @@ import AppColorToggle from '@/components/App/AppColorToggle.vue'
 			</SidenavItem>
 
 			<SidenavItem to="/workflows">
-				<i-lucide-flask-conical class="text-2xl" />
+				<i-lucide-function-square class="text-2xl" />
 			</SidenavItem>
 
 			<SidenavItem to="/settings">
 				<i-lucide-wrench class="text-2xl" />
 			</SidenavItem>
 
-			<SidenavItem class="lg:(block mt-auto)">
+			<SidenavItem
+				class="lg:(block mt-auto)"
+				@click="userStore.logOut()"
+			>
 				<i-lucide-log-out class="text-2xl" />
 			</SidenavItem>
 
-			<SidenavItem class="hidden lg:(block)">
+			<div class="hidden mt-2 lg:(block)">
 				<AppColorToggle />
-			</SidenavItem>
+			</div>
 		</div>
 	</nav>
 </template>
