@@ -1,3 +1,6 @@
+@import '@braks/vue-flow/dist/style.css';
+@import '@braks/vue-flow/dist/theme-default.css';
+
 @font-face {
 	font-family: 'e-Ukraine';
 	font-style: normal;
