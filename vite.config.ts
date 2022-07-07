@@ -18,7 +18,11 @@ export default defineConfig({
       ],
     }), 
      Icons()
-  ], 
+  ],
+  
+  preview: {
+    port: 3000
+  },
 
   resolve:{
     alias:{
