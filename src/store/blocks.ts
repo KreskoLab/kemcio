@@ -76,6 +76,7 @@ export const useBlocks = defineStore('blocks', {
 					_id: res.data._id,
 					name: res.data.name,
 					createdAt: res.data.createdAt,
+					pause: res.data.pause,
 					nodes: res.data.rawNodes ? (JSON.parse(res.data.rawNodes) as GraphNode[]) : undefined,
 					edges: res.data.rawEdges ? (JSON.parse(res.data.rawEdges) as GraphEdge[]) : undefined,
 				}
