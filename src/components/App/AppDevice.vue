@@ -1,18 +1,19 @@
-<script
-	setup
-	lang="ts"
->
-import AppModal from '@/components/App/AppModal.vue'
+<script setup lang="ts">
+import AppModal from '@/components/App/Modal/AppModal.vue'
 import AppTabs from '@/components/App/AppTabs.vue'
 import AppTabItem from '@/components/App/AppTabItem.vue'
 import AppButton from '@/components/App/AppButton.vue'
 import AppSpinner from '@/components//App/AppSpinner.vue'
 import AppForm from '@/components/App/AppForm.vue'
+import AppSegments from '@/components/App/AppSegments.vue'
+import ChartLine from '@/components/Chart/ChartLine.vue'
 import { AxiosStatic } from 'axios'
 import { useDeviceForm, usePinForm, useWiFiForm } from '@/forms'
 import { useIcon } from '@/composables/get-icon'
-import type { FormItem, Device, DeviceType } from '@/models'
-import { inject, reactive, ref, watch } from 'vue'
+import type { FormItem, Device, DeviceType, DeviceElement, ElementsData, Period, ModalSize } from '@/models'
+import { inject, onBeforeMount, reactive, ref, watch } from 'vue'
+import { ElementData } from '@braks/vue-flow'
+import { useMain } from '@/store/main'
 
 interface WiFi {
 	SSId1: string
@@ -24,19 +25,22 @@ interface WiFi {
 const props = defineProps<{
 	id: string
 	name: string
+	online: boolean
 	device: string
 	icon: string
 	type: DeviceType
 	interval?: number
 	pin?: string
-	online: boolean
+	elements?: DeviceElement[]
 }>()
 
-const emit = defineEmits<{
+defineEmits<{
 	(event: 'close'): void
 }>()
 
 const axios = inject('axios') as AxiosStatic
+
+const mainStore = useMain()
 
 const currentTab = ref<number>(0)
 
@@ -49,11 +53,41 @@ const wifiForm = reactive<Partial<WiFi>>({})
 const mainSchema = ref<FormItem[][]>([[]])
 const wifiSchema = ref<FormItem[][]>([[]])
 
+const deviceElements = reactive<Pick<DeviceElement, 'name' | 'element'>[]>([])
+const elementsData = reactive<ElementsData>({})
+
+const chartPeriod = ref<Period>('day')
+const modalSize = ref<ModalSize>('lg')
+
+const segmnets = [
+	{
+		name: 'День',
+		value: 'day',
+	},
+	{
+		name: 'Тиждень',
+		value: 'week',
+	},
+	{
+		name: 'Місяць',
+		value: 'month',
+	},
+]
+
+onBeforeMount(() => {
+	if (props.elements) {
+		const items = props.elements.map(({ name, element }) => ({ name, element: element.toLowerCase() }))
+		deviceElements.push(...items)
+	}
+})
+
 watch(
 	currentTab,
 	async (tab) => {
 		switch (tab) {
 			case 0:
+				modalSize.value = 'lg'
+
 				if (mainSchema.value[0].length === 0) {
 					const deviceForm = useDeviceForm()[0]
 					deviceForm.name = 'name'
@@ -75,6 +109,8 @@ watch(
 				break
 
 			case 1:
+				modalSize.value = 'lg'
+
 				if (wifiSchema.value[0].length === 0) {
 					const wifi = await getWiFi()
 					const wifiForm = useWiFiForm()
@@ -87,10 +123,31 @@ watch(
 				}
 
 				break
+
+			case 2:
+				modalSize.value = 'lg'
+				break
+
+			case 3:
+				modalSize.value = 'xl'
+
+				if (props.elements?.length) {
+					for (const item of deviceElements) {
+						elementsData[item.element] = await getElementData(item.element)
+					}
+				}
+
+				break
 		}
 	},
 	{ immediate: true }
 )
+
+watch(chartPeriod, async () => {
+	for (const item of deviceElements) {
+		elementsData[item.element] = await getElementData(item.element)
+	}
+})
 
 async function getWiFi() {
 	return axios.get<WiFi>(`/devices/${props.id}/wifi`).then((res) => res.data)
@@ -98,12 +155,12 @@ async function getWiFi() {
 
 async function updateDevice() {
 	if (Object.keys(mainForm).length) {
-		await axios.put(`/devices/${props.id}`, mainForm)
+		await axios.put(`/devices/${props.id}`, mainForm).then(() => mainStore.updateCounter())
 	}
 }
 
 async function removeDevice() {
-	await axios.delete(`/devices/${props.id}`)
+	await axios.delete(`/devices/${props.id}`).then(() => mainStore.updateCounter())
 }
 
 async function updateWiFi() {
@@ -111,24 +168,32 @@ async function updateWiFi() {
 		await axios.put(`/devices/${props.id}/wifi`, wifiForm)
 	}
 }
+
+async function getElementData(element: string) {
+	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+	return axios
+		.get<ElementData[]>(`/devices/${props.id}/data/${element}?period=${chartPeriod.value}&tz=${timezone}`)
+		.then((res) => res.data)
+}
 </script>
 
 <template>
 	<AppModal
-		size="lg"
+		:size="modalSize"
 		@close="$emit('close')"
 	>
 		<template #header>
 			<div class="flex items-center space-x-4">
 				<svg
 					viewBox="0 0 24 24"
-					class="h-10 w-10 dark:text-light-800"
+					class="h-8 w-8 sm:(h-10 w-10) title"
 					v-html="useIcon(icon)"
 				/>
 
 				<div>
-					<h1 class="dark:text-light-200 text-xl font-medium">{{ name }}</h1>
-					<h2 class="subtitle">{{ device }}</h2>
+					<h1 class="title text-lg sm:text-xl">{{ name }}</h1>
+					<h2 class="subtitle text-xs sm:text-base">{{ device }}</h2>
 				</div>
 			</div>
 		</template>
@@ -152,10 +217,7 @@ async function updateWiFi() {
 					</AppButton>
 				</AppTabItem>
 
-				<AppTabItem
-					v-if="online"
-					label="WiFi"
-				>
+				<AppTabItem label="WiFi">
 					<div v-if="wifiSchema[0].length">
 						<AppForm
 							ref="wifiFormComponent"
@@ -181,18 +243,46 @@ async function updateWiFi() {
 					</div>
 				</AppTabItem>
 
-				<AppTabItem v-if="type === 'sensor'" label="Графік">Графік</AppTabItem>
 				<AppTabItem label="Система">
 					<div>
 						<h1 class="title !text-red-500">Видалити пристрій</h1>
 						<p class="subtitle pt-2">Усі данні пристрою буде видаленно! Прошивка увімкне оффлайн режим.</p>
 
 						<AppButton
-							class="w-32 bg-red-500 mt-6"
+							variant="danger"
+							class="w-32 mt-6"
 							@click="removeDevice()"
 						>
 							Видалити
 						</AppButton>
+					</div>
+				</AppTabItem>
+
+				<AppTabItem
+					v-if="type === 'sensor'"
+					label="Данні"
+				>
+					<div class="my-4">
+						<AppSegments
+							v-model="chartPeriod"
+							:segments="segmnets"
+						/>
+					</div>
+
+					<div
+						v-for="item in deviceElements"
+						:key="item.element"
+						class="mb-4"
+					>
+						<ChartLine
+							v-if="elementsData[item.element]"
+							:title="item.name"
+							:chart-id="item.element"
+							:chart-data="elementsData[item.element]"
+							:period="chartPeriod"
+							:width="800"
+							:height="280"
+						/>
 					</div>
 				</AppTabItem>
 			</AppTabs>
