@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { NodeIdInjection, useVueFlow } from '@braks/vue-flow'
 import { onClickOutside } from '@vueuse/core'
 import { inject, ref } from 'vue'
