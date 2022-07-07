@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import AppButton from '@/components/App/AppButton.vue'
 import AppForm from '@/components/App/AppForm.vue'
-import AppModal from '@/components/App/AppModal.vue'
+import AppModal from '@/components/App/Modal/AppModal.vue'
+import AppModalDelete from '@/components/App/Modal/AppModalDelete.vue'
 import type { FormItem, User } from '@/models'
 import { useUser } from '@/store/user'
 import { inject, nextTick, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
@@ -94,37 +95,18 @@ function hideModal() {
 </script>
 
 <template>
-	<AppModal
+	<AppModalDelete
 		v-if="remove.status"
-		size="md"
+		title="Видалити користувача"
 		@close="remove.status = false"
+		@remove="removeUser()"
 	>
-		<template #header>
-			<h1 class="title">Видалити користувача</h1>
-		</template>
-
-		<template #body>
-			<p class="subtitle">Користувача {{ remove.name }} буде видалено із системи!</p>
-		</template>
-
-		<template #footer>
-			<div class="flex justify-between mt-2">
-				<AppButton
-					transparent
-					class="w-64"
-					@click="remove.status = false"
-				>
-					Назад
-				</AppButton>
-
-				<AppButton @click="removeUser()">Так</AppButton>
-			</div>
-		</template>
-	</AppModal>
+		<p class="subtitle">Користувача {{ remove.name }} буде видалено із системи!</p>
+	</AppModalDelete>
 
 	<AppModal
 		v-if="addUser || userToUpdate.status"
-		size="md"
+		size="lg"
 		@close="hideModal()"
 	>
 		<template #header>
@@ -214,17 +196,17 @@ function hideModal() {
 						<td>
 							<div
 								v-if="user._id !== userStore._id"
-								class="flex space-x-4 sm:(justify-around space-x-0) px-6 py-4"
+								class="flex space-x-4 sm:(justify-around space-x-0) subtitle px-6 py-4"
 							>
 								<button
-									class="text-purple-600 dark:text-purple-500"
+									class=""
 									@click="Object.assign(userToUpdate, { id: user._id, status: true })"
 								>
 									<i-lucide-pencil />
 								</button>
 
 								<button
-									class="text-purple-600 dark:text-purple-500 hover:text-red-500"
+									class="transtion duration-150 hover:(text-red-400 dark:text-red-500)"
 									@click="Object.assign(remove, { id: user._id, name: user.name, status: true })"
 								>
 									<i-lucide-trash />
