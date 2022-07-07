@@ -1,3 +1,10 @@
+<script setup lang="ts">
+defineProps<{
+	steps: number
+	step: number
+}>()
+</script>
+
 <template>
 	<div class="flex space-x-6 justify-center">
 		<div
@@ -8,13 +15,3 @@
 		/>
 	</div>
 </template>
-
-<script
-	setup
-	lang="ts"
->
-defineProps<{
-	steps: number
-	step: number
-}>()
-</script>

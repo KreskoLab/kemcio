@@ -1,137 +1,116 @@
 <template>
-	<div class="page flex flex-col space-y-6 items-center lg:(space-y-8 justify-center) h-full">
+	<div
+		class="page flex flex-col space-y-6 pt-28 md:(pl-28 pr-10) lg:(space-y-8 justify-center items-center pt-0) h-full"
+	>
 		<div class="w-full px-4 lg:(w-2xl px-12)">
-			<UiSteps
-				:steps="3"
+			<AppSteps
+				:steps="steps"
 				:step="step"
 			/>
 		</div>
 
-		<div class="form flex flex-col items-center min-w-full lg:(min-w-2xl py-6 h-max) h-full">
-			<h1 class="title w-8/12 text-3xl mb-4">
+		<div class="form flex flex-col items-center min-w-full lg:(min-w-2xl py-6)">
+			<h1 class="title w-8/12 text-xl text-center mt-4 lg:(text-3xl mb-4 mt-0)">
 				{{ title }}
 			</h1>
 
-			<form
-				v-show="step < steps"
-				class="flex flex-col items-center space-y-3 w-full"
-				@submit.prevent
-			>
-				<div
-					v-for="(item, i) in schemas[step - 1]"
-					:key="i"
-					class="w-8/12"
-				>
-					<component
-						:is="components[item.component]"
-						v-model="form[item.name]"
-						:label="item.label"
-						:placeholder="item.placeholder"
-						:options="item.options"
-						:error="v$[item.name].$error"
-						:error-message="v$[item.name].$errors[0]?.$message"
-					/>
-				</div>
-			</form>
-
 			<div
-				v-if="step === steps"
-				class="flex justify-center w-8/12 my-8"
+				v-if="step > steps"
+				class="flex justify-center w-10/12 my-6 md:(w-8/12 my-8)"
 			>
 				<TheFirmware
-					:form="form"
-					@uploaded="addDevice($event)"
+					:pin="form.pin"
+					:gpio="form.device.gpio"
+					:interval="form.interval"
+					:firmware="form.device.value"
+					:ssid="form.ssid"
+					:pass="form.pass"
+					:name="form.deviceName"
+					:type="form.device.type"
+					:vendor="form.vendor"
+					:device="form.device.name"
+					@uploaded="$router.push('/')"
 				/>
 			</div>
 
 			<div
-				v-if="step !== 3"
-				class="flex items-end space-x-6 justify-end w-8/12 !mt-6"
+				v-else
+				class="w-8/12 mb-5 lg:(mb-0)"
 			>
-				<div
-					v-if="step == 2"
-					class="w-max"
-				>
-					<AppButton
-						transparent
-						@click="prevStep()"
-					>
-						<i-lucide-corner-down-left />
-					</AppButton>
-				</div>
-
-				<div class="min-w-24">
-					<AppButton @click="nextStep()">Далі</AppButton>
-				</div>
+				<AppForm
+					:schema="schemas"
+					:step="step"
+					:steps="steps"
+					@next="step++"
+					@prev="step--"
+					@input="Object.assign(form, $event)"
+				/>
 			</div>
 		</div>
 	</div>
 </template>
 
-<script
-	setup
-	lang="ts"
->
-import AppSelect from '@/components/App/AppSelect.vue'
-import AppInput from '@/components/App/AppInput.vue'
-import UiSteps from '@/components/UI/UiSteps.vue'
-import AppButton from '@/components/App/AppButton.vue'
+<script setup lang="ts">
+import AppSteps from '@/components/App/AppSteps.vue'
 import TheFirmware from '@/components/TheFirmware.vue'
-
-import type { Vendor, VendorDevice, NewDevice } from '@/models/models'
+import AppForm from '@/components/App/AppForm.vue'
+import axios from 'axios'
+import type { Vendor, VendorDevice, FormItem } from '@/models'
 import { onBeforeMount, ref, watch, reactive } from 'vue'
 import { computed } from '@vue/reactivity'
+import { useDeviceForm, usePinForm, useWiFiForm } from '@/forms'
 
-import newDevice from '@/schemas/new-device.json'
-import wifi from '@/schemas/wifi.json'
-
-import useVuelidate from '@vuelidate/core'
-import { useValidation } from '@/composables/validation'
-import axios from 'axios'
-import router from '@/router'
-
-const steps = ref<number>(3)
+const schemas = ref<FormItem[][]>([useDeviceForm(), useWiFiForm()])
 const step = ref<number>(1)
-const formStep = ref<number>(0)
 
-const components = {
-	AppInput: AppInput,
-	AppSelect: AppSelect,
-}
+const steps = computed(() => schemas.value.length)
 
-const form: { [key: string]: string } = reactive({})
+const form = reactive({
+	deviceName: '',
+	vendor: '',
+	device: {} as VendorDevice,
+	ssid: '',
+	pass: '',
+	pin: '',
+	interval: 0,
+})
 
 const title = computed(() => {
-	switch (step.value) {
-		case 1:
-			return 'Новий пристрій'
+	if (steps.value === 2) {
+		switch (step.value) {
+			case 1:
+				return 'Новий пристрій'
 
-		case 2:
-			return 'Дані WiFi мережі'
+			case 2:
+				return 'Дані WiFi мережі'
 
-		case 3:
-			return 'Завантаження прошивки'
+			case 3:
+				return 'Завантаження прошивки'
+		}
+	} else {
+		switch (step.value) {
+			case 1:
+				return 'Новий пристрій'
+
+			case 2:
+				return 'Дані WiFi мережі'
+
+			case 3:
+				return 'Дані датчика'
+
+			case 4:
+				return 'Завантаження прошивки'
+		}
 	}
 })
 
-const schemas = ref([newDevice, wifi])
-
-for (let index in schemas.value[formStep.value]) {
-	const item = schemas.value[formStep.value][index]
-	form[item.name] = ''
-}
-
-const validationRules = computed(() => useValidation(schemas.value[formStep.value]))
-
-const v$ = useVuelidate(validationRules, form)
-
-const res = (await axios.get(`${import.meta.env.VITE_API}/devices/vendors`)).data
+const res = await axios.get<Vendor[]>('/devices/vendors').then((res) => res.data)
 
 onBeforeMount(async () => {
 	const schema = schemas.value[0]
 	const vendors = schema[1]
 
-	vendors.options = res.map((item: Vendor) => ({
+	vendors.options = res.map((item) => ({
 		label: item.name,
 		value: item.slug,
 	}))
@@ -143,32 +122,27 @@ watch(
 		const schema = schemas.value[0]
 		const devices = schema[2]
 
-		devices.options = res
-			.find((item: Vendor) => item.slug === form.vendor)
-			.devices.map((device: VendorDevice) => ({
+		const vendor = res.find((item) => item.slug === form.vendor)
+
+		if (vendor) {
+			devices.options = vendor.devices.map((device) => ({
 				label: device.name,
 				value: device,
 			}))
+		}
 	}
 )
 
-function nextStep() {
-	v$.value.$validate()
+watch(
+	() => form.device.type,
+	(val: string) => {
+		const pinForm = usePinForm()
 
-	if (!v$.value.$error && step.value < steps.value) {
-		step.value++
-
-		if (step.value < steps.value) formStep.value++
+		if (val === 'sensor') {
+			if (!schemas.value.includes(pinForm)) schemas.value.push(pinForm)
+		} else {
+			if (schemas.value.includes(pinForm)) schemas.value.pop()
+		}
 	}
-}
-
-function prevStep() {
-	step.value--
-	formStep.value--
-}
-
-async function addDevice(device: NewDevice) {
-	await axios.post(`${import.meta.env.VITE_API}/devices`, device)
-	router.push('/devices')
-}
+)
 </script>
