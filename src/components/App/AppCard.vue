@@ -3,7 +3,7 @@ import AppInfo from '@/components/App/AppInfo.vue'
 import AppToggle from '@/components/App/AppToggle.vue'
 import AppRange from '@/components/App/AppRange.vue'
 import AppColor from '@/components/App/AppColor.vue'
-import TheDeviceInfo from '@/components/TheDeviceInfo.vue'
+import AppDevice from '@/components/App/AppDevice.vue'
 import type { DeviceType, DeviceElement } from '@/models'
 import { computed, ref } from 'vue'
 import { useIcon } from '@/composables/get-icon'
@@ -63,7 +63,7 @@ async function handleInput(element: string, value: string | number) {
 </script>
 
 <template>
-	<TheDeviceInfo
+	<AppDevice
 		v-if="showMore"
 		:id="id"
 		:icon="card.icon"
