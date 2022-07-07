@@ -46,10 +46,7 @@
 	</div>
 </template>
 
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { ESPLoader } from 'esp-web-flasher'
 import { onBeforeUnmount, reactive, ref } from 'vue'
 import { Device } from '@/models'
@@ -188,7 +185,7 @@ async function settings() {
 	loading.value = true
 
 	const textEncoder = new TextEncoderStream()
-	textEncoder.readable.pipeTo(port.writable)
+	textEncoder.readable.pipeTo(port.writable as WritableStream<Uint8Array>)
 
 	const writer = textEncoder.writable.getWriter()
 
