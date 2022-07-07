@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import Node from '@/components/Node/Node.vue'
 import AppInput from '@/components/App/AppInput.vue'
 import NodeHandler from '@/components/Node/NodeHandler.vue'

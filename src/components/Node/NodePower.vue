@@ -4,14 +4,11 @@ export default {
 }
 </script>
 
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import Node from '@/components/Node/Node.vue'
 import NodeHandler from '@/components/Node/NodeHandler.vue'
 import AppToggle from '@/components/App/AppToggle.vue'
-import AppModal from '@/components/App/AppModal.vue'
+import AppModal from '@/components/App/Modal/AppModal.vue'
 import AppSelect from '@/components/App/AppSelect.vue'
 import { NodeData, Device, OptionModel } from '@/models'
 import { Position } from '@braks/vue-flow'

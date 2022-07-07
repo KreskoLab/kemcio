@@ -6,7 +6,7 @@ export default {
 
 <script setup lang="ts">
 import Node from '@/components/Node/Node.vue'
-import AppModal from '@/components/App/AppModal.vue'
+import AppModal from '@/components/App/Modal/AppModal.vue'
 import AppButton from '@/components/App/AppButton.vue'
 import NodeHandler from '@/components/Node/NodeHandler.vue'
 import AppForm from '@/components/App/AppForm.vue'
