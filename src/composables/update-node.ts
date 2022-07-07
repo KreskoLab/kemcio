@@ -10,6 +10,9 @@ export const updateNodeData = (id: string, value: string | number | object | boo
 export const updateNodeState = (state: Ref<string> | object, id: string) => {
 	const node = getNodes.value.find((node) => node.id == id) as GraphNode
 
-	if (isRef(state)) state.value = node?.data
-	else Object.assign(state, node?.data)
+	if (isRef(state)) {
+		if (typeof node?.data === 'string') state.value = node?.data
+	} else {
+		Object.assign(state, node?.data)
+	}
 }
