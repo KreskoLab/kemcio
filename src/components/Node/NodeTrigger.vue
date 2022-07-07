@@ -4,10 +4,7 @@ export default {
 }
 </script>
 
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import Node from '@/components/Node/Node.vue'
 import AppModal from '@/components/App/AppModal.vue'
 import AppButton from '@/components/App/AppButton.vue'
@@ -48,7 +45,7 @@ watch(state, () => updateNodeData(id.value, state))
 <template>
 	<AppModal
 		v-if="editNode"
-		size="lg"
+		size="md"
 		@close="editNode = false"
 	>
 		<template #header>
