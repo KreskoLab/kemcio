@@ -7,6 +7,7 @@ interface Props {
 }
 
 defineProps<Props>()
+
 const emit = defineEmits(['close'])
 
 const show = ref<boolean>(false)
@@ -33,9 +34,9 @@ onMounted(() => (show.value = true))
 					v-if="show"
 					class="flex flex-col space-y-5 h-full w-full py-24 sm:(rounded-3xl pb-4 h-max) bg-light-100 dark:bg-dark-600 px-8 overflow-y-auto"
 					:class="[
-						{ 'max-w-sm': size === 'base' },
+						{ '!sm:(max-h-[320px] max-w-sm py-6)': size === 'base' },
 						{ '!sm:(max-h-[460px] w-md py-8)': size === 'md' },
-						{ '!sm:(max-h-[580px] w-lg pt-8)': size === 'lg' },
+						{ '!sm:(max-h-[580px] w-lg pt-8 pb-6)': size === 'lg' },
 						{ '!sm:(max-h-[720px] w-2xl pt-6)': size === 'xl' },
 					]"
 				>
