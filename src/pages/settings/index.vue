@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { onBeforeMount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useIcon } from '@/composables/get-icon'
@@ -39,7 +36,7 @@ const list = ref([
 					v-for="item in list"
 					:key="item.name"
 					class="flex items-center space-x-3 hover:bg-light-600 dark:hover:bg-dark-200 rounded-md py-1.5 px-3 cursor-pointer"
-					:class="{ 'dark:text-light-200 text-gray-800': $route.path === item.link }"
+					:class="{ 'dark:text-light-200 text-purple-500': $route.path === item.link }"
 				>
 					<router-link :to="item.link">
 						<svg
