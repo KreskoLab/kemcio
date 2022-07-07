@@ -2,15 +2,30 @@
 import AppButton from '@/components/App/AppButton.vue'
 import AppCard from '@/components/App/AppCard.vue'
 import { AxiosStatic } from 'axios'
-import { inject, onMounted, reactive } from 'vue'
+import { inject, reactive, watch } from 'vue'
 import type { Device } from '@/models'
+import { useMain } from '@/store/main'
+import { computed } from '@vue/reactivity'
 
 const axios = inject('axios') as AxiosStatic
+
+const mainStore = useMain()
+const updateCounter = computed(() => mainStore.counter)
+
 const devices = reactive<Device[]>([])
 
-await axios.get<Device[]>('/devices').then((res) => devices.push(...res.data.sort(({ online }) => (online ? -1 : 1))))
+await getDevices()
 
-onMounted(() => {
+async function getDevices() {
+	await axios.get<Device[]>('/devices').then((res) => {
+		devices.length = 0
+		devices.push(...res.data.sort(({ online }) => (online ? -1 : 1)))
+
+		listenDevices()
+	})
+}
+
+function listenDevices() {
 	const sse = new EventSource(`${import.meta.env.VITE_API}/devices/status`)
 
 	sse.onmessage = (event: MessageEvent) => {
@@ -28,7 +43,9 @@ onMounted(() => {
 			}
 		}
 	}
-})
+}
+
+watch(updateCounter, async () => await getDevices())
 </script>
 
 <template>
