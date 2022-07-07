@@ -10,8 +10,9 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"esModuleInterop": true,
+		"skipLibCheck": true,
 		"lib": ["esnext", "dom"],
-		"types": ["vite/client"],
+		"types": ["vite/client", "@types/w3c-web-serial"],
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["src/*"]
