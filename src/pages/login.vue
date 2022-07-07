@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import AppInput from '@/components/App/AppInput.vue'
 import AppButton from '@/components/App/AppButton.vue'
 import UIToast from '@/components/UI/UIToast.vue'
@@ -49,7 +46,7 @@ async function logIn() {
 		<UIToast ref="toast" />
 
 		<form
-			class="flex flex-col space-y-4 lg:space-y-6 bg-white"
+			class="flex flex-col space-y-4 lg:space-y-6 form"
 			@submit.prevent
 		>
 			<img
@@ -66,7 +63,7 @@ async function logIn() {
 					:error-message="v$.login.$errors[0]?.$message"
 				>
 					<template #icon>
-						<i-lucide-user />
+						<i-lucide-user class="title" />
 					</template>
 				</AppInput>
 			</div>
@@ -81,7 +78,7 @@ async function logIn() {
 					:error-message="v$.password.$errors[0]?.$message"
 				>
 					<template #icon>
-						<i-lucide-key />
+						<i-lucide-key class="title" />
 					</template>
 				</AppInput>
 			</div>
