@@ -1,12 +1,14 @@
 <template>
-	<div class="flex flex-col-reverse lg:flex-row h-screen w-full">
-		<RouterView name="SideNav" />
+	<div class="flex flex-col-reverse lg:flex-row page">
+		<RouterView name="Sidenav" />
 
-		<main class="h-full w-full">
+		<main class="w-full h-screen lg:(min-h-screen)">
 			<Suspense>
 				<RouterView />
 			</Suspense>
 		</main>
+
+		<RouterView name="Navbar" />
 	</div>
 </template>
 
