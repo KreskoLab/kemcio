@@ -3,14 +3,17 @@ import AppButton from '@/components/App/AppButton.vue'
 import AppForm from '@/components/App/AppForm.vue'
 import AppModal from '@/components/App/Modal/AppModal.vue'
 import AppModalDelete from '@/components/App/Modal/AppModalDelete.vue'
+import AppToast from '@/components/App/AppToast.vue'
 import type { FormItem, User } from '@/models'
 import { useUser } from '@/store/user'
 import { inject, nextTick, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
-import { AxiosStatic } from 'axios'
+import { AxiosStatic, AxiosError } from 'axios'
 import { useAccountForm } from '@/forms/account'
 
 const axios = inject('axios') as AxiosStatic
 const userStore = useUser()
+
+const toast = ref<InstanceType<typeof AppToast>>()
 
 const remove = reactive({ id: '', name: '', status: false })
 const userToUpdate = reactive({ id: '', status: false })
@@ -60,10 +63,15 @@ async function removeUser() {
 
 async function createUser() {
 	if (await formComponent.value?.validateForm()) {
-		await axios.post('/users', newUser).then(async () => {
-			addUser.value = false
-			await getUsers()
-		})
+		try {
+			await axios.post('/users', newUser).then(async () => {
+				addUser.value = false
+				await getUsers()
+			})
+		} catch (error) {
+			const err = error as AxiosError
+			toast.value?.add(err.response?.data, 'error')
+		}
 	}
 }
 
@@ -95,6 +103,8 @@ function hideModal() {
 </script>
 
 <template>
+	<AppToast ref="toast" />
+
 	<AppModalDelete
 		v-if="remove.status"
 		title="Видалити користувача"
