@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// 🤡 🤡 🤡
-
 import { markRaw, onMounted, ref, watch } from 'vue'
 
 type Segemnt = {
@@ -18,7 +16,6 @@ const emit = defineEmits<{
 }>()
 
 const selected = ref<Segemnt>()
-const opacity = ref<string>('')
 const bgPosition = ref<number>(0)
 const bgWidth = ref<number>(0)
 const items = ref<HTMLElement[]>([])
@@ -46,28 +43,17 @@ watch(selected, (segment) => {
 	bgPosition.value = items.value[valIndex].offsetLeft * 1
 
 	emit('update:modelValue', segment?.value as Segemnt['value'])
-
-	opacity.value = 'invisible opacity-0'
-
-	setTimeout(() => {
-		opacity.value = 'visible opacity-100'
-	}, 250)
 })
 </script>
 
 <template>
-	<ul class="relative flex justify-center items-center space-x-6 rounded-xl bg-gray-200 dark:bg-dark-200 p-2">
-		<div
-			class="absolute dark:bg-purple-600 bg-purple-400 rounded-lg h-9 z-0 transition-all duration-300 ease-in-out py-1.5 text-center"
+	<ul class="relative flex justify-center items-center space-x-6 rounded-xl bg-gray-200 dark:bg-dark-200 p-2 z-0">
+		<span
+			class="absolute h-full -z-1 transition-all duration-300 ease-in-out py-1.5 text-center"
 			:style="{ left: `${bgPosition}px`, width: `${bgWidth}px` }"
 		>
-			<span
-				class="dark:text-light-100 text-white transition-opacity duration-75"
-				:class="opacity"
-			>
-				{{ selected?.name }}
-			</span>
-		</div>
+			<span class="flex w-full h-full dark:bg-purple-600 bg-purple-400 rounded-lg"></span>
+		</span>
 
 		<li
 			v-for="segment in segments"
@@ -76,7 +62,7 @@ watch(selected, (segment) => {
 		>
 			<button
 				ref="items"
-				class="w-full py-1.5 title font-normal z-50"
+				class="w-full py-1.5 title font-normal"
 				@click="selected = segment"
 			>
 				<span>{{ segment.name }}</span>
