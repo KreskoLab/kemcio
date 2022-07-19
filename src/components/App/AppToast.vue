@@ -33,35 +33,37 @@ defineExpose({ add })
 </script>
 
 <template>
-	<div class="fixed top-4 right-4">
-		<transition-group
-			tag="ul"
-			enter-active-class="animate-animated animate-bounceInDown"
-			leave-active-class="animate-animated animate-bounceOut"
-		>
-			<li
-				v-for="toast in toasts"
-				:key="toast.id"
-				class="pt-2"
+	<Teleport to="#modal-area">
+		<div class="fixed top-4 right-4 z-100">
+			<transition-group
+				tag="ul"
+				enter-active-class="animate-animated animate-bounceInDown"
+				leave-active-class="animate-animated animate-bounceOut"
 			>
-				<div class="flex items-center space-x-3 w-full sm:w-72 py-3 px-4 form">
-					<i-lucide-alert-circle
-						class="w-6 h-6"
-						:class="[
-							{
-								'text-red-400': toast.type === 'error',
-							},
-							{
-								'text-amber-400': toast.type === 'warn',
-							},
-							{
-								'text-green-400': toast.type === 'success',
-							},
-						]"
-					/>
-					<span class="title text-base font-normal">{{ toast.message }}</span>
-				</div>
-			</li>
-		</transition-group>
-	</div>
+				<li
+					v-for="toast in toasts"
+					:key="toast.id"
+					class="pt-2"
+				>
+					<div class="flex items-center space-x-3 w-full sm:w-72 py-3 px-4 form">
+						<i-lucide-alert-circle
+							class="w-6 h-6"
+							:class="[
+								{
+									'text-red-400': toast.type === 'error',
+								},
+								{
+									'text-amber-400': toast.type === 'warn',
+								},
+								{
+									'text-green-400': toast.type === 'success',
+								},
+							]"
+						/>
+						<span class="title text-base font-normal">{{ toast.message }}</span>
+					</div>
+				</li>
+			</transition-group>
+		</div>
+	</Teleport>
 </template>
