@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppInput from '@/components/App/AppInput.vue'
 import AppButton from '@/components/App/AppButton.vue'
-import UIToast from '@/components/UI/UIToast.vue'
+import AppToast from '@/components/App/AppToast.vue'
 import useVuelidate from '@vuelidate/core'
 import { ref, computed, reactive } from 'vue'
 import { useUser } from '@/store/user'
@@ -19,7 +19,7 @@ const form = reactive({
 const validationRules = computed(() => useValidation(useLoginForm()))
 const v$ = useVuelidate(validationRules, form)
 
-const toast = ref<InstanceType<typeof UIToast>>()
+const toast = ref<InstanceType<typeof AppToast>>()
 
 const userStore = useUser()
 
@@ -34,19 +34,17 @@ async function logIn() {
 			await userStore.getUser()
 
 			router.push('/')
-		} else {
-			toast.value?.err(res)
-		}
+		} else toast.value?.add(res, 'error')
 	}
 }
 </script>
 
 <template>
 	<div class="flex justify-center radial h-full !pl-0">
-		<UIToast ref="toast" />
+		<AppToast ref="toast" />
 
 		<form
-			class="flex flex-col space-y-4 lg:space-y-6 form"
+			class="flex flex-col space-y-4 lg:space-y-6 form rounded-none sm:rounded-xl"
 			@submit.prevent
 		>
 			<img
