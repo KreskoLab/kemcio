@@ -52,25 +52,30 @@ async function getUsers() {
 }
 
 async function removeUser() {
-	await axios.delete(`/users/${remove.id}`).then(async () => {
+	try {
+		await axios.delete(`/users/${remove.id}`)
+		await getUsers()
+
 		remove.id = ''
 		remove.name = ''
 		remove.status = false
 
-		await getUsers()
-	})
+		addSuccessToast(`Користувач видален`)
+	} catch (error) {
+		addErrorToast(error)
+	}
 }
 
 async function createUser() {
 	if (await formComponent.value?.validateForm()) {
 		try {
-			await axios.post('/users', newUser).then(async () => {
-				addUser.value = false
-				await getUsers()
-			})
+			await axios.post('/users', newUser)
+			await getUsers()
+
+			addUser.value = false
+			addSuccessToast(`Користувач ${newUser.name} створен`)
 		} catch (error) {
-			const err = error as AxiosError
-			toast.value?.add(err.response?.data, 'error')
+			addErrorToast(error)
 		}
 	}
 }
@@ -84,16 +89,30 @@ async function updateUser() {
 	}
 
 	if (await formComponent.value?.validateForm()) {
-		await axios.put(`/users/${userToUpdate.id}`, newUser).then(async () => {
-			userToUpdate.id = ''
-			userToUpdate.status = false
-
-			newUserForm.value[0][2].validations = useAccountForm()[2].validations
-			formComponent.value?.resetValidation()
-
+		try {
+			await axios.put(`/users/${userToUpdate.id}`, newUser)
 			await getUsers()
-		})
+
+			userToUpdate.status = false
+			addSuccessToast(`Користувач оновлен`)
+		} catch (error) {
+			addErrorToast(error)
+		}
+
+		userToUpdate.id = ''
+
+		newUserForm.value[0][2].validations = useAccountForm()[2].validations
+		formComponent.value?.resetValidation()
 	}
+}
+
+function addErrorToast(error: any) {
+	const err = error as AxiosError
+	toast.value?.add(err.response?.data, 'error')
+}
+
+function addSuccessToast(message: string) {
+	toast.value?.add(message, 'success')
 }
 
 function hideModal() {

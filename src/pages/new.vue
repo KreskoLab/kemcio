@@ -54,11 +54,13 @@
 import AppSteps from '@/components/App/AppSteps.vue'
 import TheFirmware from '@/components/TheFirmware.vue'
 import AppForm from '@/components/App/AppForm.vue'
-import axios from 'axios'
+import { AxiosStatic } from 'axios'
 import type { Vendor, VendorDevice, FormItem } from '@/models'
-import { onBeforeMount, ref, watch, reactive } from 'vue'
+import { ref, watch, reactive, inject } from 'vue'
 import { computed } from '@vue/reactivity'
 import { useDeviceForm, usePinForm, useWiFiForm } from '@/forms'
+
+const axios = inject('axios') as AxiosStatic
 
 const schemas = ref<FormItem[][]>([useDeviceForm(), useWiFiForm()])
 const step = ref<number>(1)
@@ -106,15 +108,13 @@ const title = computed(() => {
 
 const res = await axios.get<Vendor[]>('/devices/vendors').then((res) => res.data)
 
-onBeforeMount(async () => {
-	const schema = schemas.value[0]
-	const vendors = schema[1]
+const schema = schemas.value[0]
+const vendors = schema[1]
 
-	vendors.options = res.map((item) => ({
-		label: item.name,
-		value: item.slug,
-	}))
-})
+vendors.options = res.map((item) => ({
+	label: item.name,
+	value: item.slug,
+}))
 
 watch(
 	() => form.vendor,

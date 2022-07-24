@@ -11,6 +11,7 @@ import type { User } from '@/models/user'
 import type { ElementData, ElementsData } from '@/models/element-data'
 import type { Period } from '@/models/period'
 import type { ModalSize } from '@/models/modal-size'
+import type { Toast } from '@/models/toast'
 
 export type {
 	Vendor,
@@ -28,4 +29,5 @@ export type {
 	ElementsData,
 	Period,
 	ModalSize,
+	Toast,
 }

@@ -45,9 +45,9 @@ defineExpose({ add })
 					:key="toast.id"
 					class="pt-2"
 				>
-					<div class="flex items-center space-x-3 w-full sm:w-72 py-3 px-4 form">
+					<div class="flex items-center space-x-3 w-full sm:(max-w-72) py-3 px-4 form">
 						<i-lucide-alert-circle
-							class="w-6 h-6"
+							class="w-6 h-6 flex-shrink-0"
 							:class="[
 								{
 									'text-red-400': toast.type === 'error',

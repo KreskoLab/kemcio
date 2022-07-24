@@ -1,4 +1,6 @@
 <template>
+	<AppToast ref="toast" />
+
 	<div class="flex justify-center items-center relative w-full h-42 rounded-lg bg-white dark:bg-dark-800">
 		<div
 			v-if="loading"
@@ -47,10 +49,12 @@
 </template>
 
 <script setup lang="ts">
+import AppToast from '@/components/App/AppToast.vue'
 import { ESPLoader } from 'esp-web-flasher'
-import { onBeforeUnmount, reactive, ref } from 'vue'
+import { inject, onBeforeUnmount, reactive, ref } from 'vue'
 import { Device } from '@/models'
-import axios from 'axios'
+import { AxiosStatic } from 'axios'
+import { useToast } from '@/composables/toast'
 
 interface WebSocketMsg {
 	deviceId?: string
@@ -75,6 +79,9 @@ const emit = defineEmits<{
 	(event: 'uploaded'): void
 }>()
 
+const axios = inject('axios') as AxiosStatic
+const toast = ref<InstanceType<typeof AppToast> | null>(null)
+
 const loading = ref(false)
 const progress = ref(0)
 const flashed = ref(false)
@@ -87,7 +94,7 @@ const flashData = reactive({
 })
 
 await axios
-	.get<Blob>(`${import.meta.env.VITE_API}/devices/firmware?device=${props.firmware}`, {
+	.get<Blob>(`/devices/firmware?device=${props.firmware}`, {
 		responseType: 'blob',
 	})
 	.then((res) => (firmware.value = res.data))
@@ -142,40 +149,50 @@ async function closeWebSocket() {
 }
 
 async function flash() {
-	const port = await navigator.serial.requestPort()
+	try {
+		const port = await navigator.serial.requestPort()
+		await port.open({ baudRate: 115200 })
 
-	await port.open({ baudRate: 115200 })
+		loading.value = true
 
-	loading.value = true
+		const espLoader = new ESPLoader(port, {
+			log: (msg) => {
+				console.log(msg)
+			},
+			debug: (msg) => {
+				console.log(msg)
+			},
+			error: (msg) => {
+				console.log(msg)
+			},
+		})
 
-	const espLoader = new ESPLoader(port, {
-		log: (msg) => {
-			console.log(msg)
-		},
-		debug: (msg) => {
-			console.log(msg)
-		},
-		error: (msg) => {
-			console.log(msg)
-		},
-	})
+		try {
+			await espLoader.initialize()
 
-	await espLoader.initialize()
+			let espStub = await espLoader.runStub()
+			const firmwareBuff = await firmware.value.arrayBuffer()
 
-	let espStub = await espLoader.runStub()
-	const firmwareBuff = await firmware.value.arrayBuffer()
+			await espStub.eraseFlash()
 
-	await espStub.eraseFlash()
+			await espStub.flashData(firmwareBuff, (bytesWritten, totalBytes) => {
+				loading.value = false
+				progress.value = Math.floor((bytesWritten / totalBytes) * 100)
+			})
 
-	await espStub.flashData(firmwareBuff, (bytesWritten, totalBytes) => {
-		loading.value = false
-		progress.value = Math.floor((bytesWritten / totalBytes) * 100)
-	})
+			await espLoader.disconnect()
+			await espLoader.hardReset()
 
-	await espLoader.disconnect()
-	await espLoader.hardReset()
+			flashed.value = true
+		} catch (error) {
+			loading.value = false
+			progress.value = 0
 
-	flashed.value = true
+			useToast(toast, 'error', 'Пристрій не відповідає')
+		}
+	} catch (error) {
+		useToast(toast, 'error', 'Пристрій не знайдено')
+	}
 }
 
 async function settings() {
