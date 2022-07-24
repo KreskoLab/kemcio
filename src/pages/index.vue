@@ -36,7 +36,7 @@ function listenDevices() {
 
 		if (device) {
 			if (Array.isArray(msg)) {
-				Object.assign(device.elements, msg)
+				device.elements = msg
 			} else {
 				Object.assign(device, msg)
 				devices.sort(({ online }) => (online ? -1 : 1))
