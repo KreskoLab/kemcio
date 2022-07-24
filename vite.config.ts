@@ -19,6 +19,8 @@ export default defineConfig({
     }), 
      Icons()
   ],
+
+  dedupe: ['vue'],
   
   preview: {
     port: 3000
