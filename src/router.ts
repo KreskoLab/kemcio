@@ -52,6 +52,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/new',
 		name: 'devices-new',
+		beforeEnter: auth,
 		components: {
 			default: () => import('@/pages/new.vue'),
 			Sidenav: () => import('@/components/TheSidenav.vue'),
