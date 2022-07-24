@@ -15,6 +15,7 @@ import { Line } from 'vue-chartjs'
 import { ElementData, Period } from '@/models'
 import { useMain } from '@/store/main'
 import { computed } from '@vue/reactivity'
+import { useIcon } from '@/composables/get-icon'
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
 
@@ -43,7 +44,7 @@ const themeSettings = computed(() => {
 	}
 })
 
-const options = computed(() => {
+const options = computed<TChartOptions<'line'>>(() => {
 	return {
 		plugins: {
 			legend: { display: false },
@@ -102,7 +103,7 @@ const options = computed(() => {
 
 const transformedData = computed<TChartData<'line'>>(() => {
 	const datasets = [
-		{ data: [] as number[], label: 'Температура', borderColor: themeSettings.value.borderColor, tension: 0.25 },
+		{ data: [] as number[], label: props.title, borderColor: themeSettings.value.borderColor, tension: 0.25 },
 	]
 	const labels: string[] = []
 
@@ -136,7 +137,8 @@ const transformedData = computed<TChartData<'line'>>(() => {
 
 <template>
 	<Line
-		:chart-options="(options as TChartOptions<'line'>)"
+		v-if="chartData.length"
+		:chart-options="options"
 		:chart-data="transformedData"
 		:chart-id="chartId"
 		:dataset-id-key="datasetIdKey"
@@ -146,4 +148,16 @@ const transformedData = computed<TChartData<'line'>>(() => {
 		:width="width"
 		:height="height"
 	/>
+
+	<div
+		v-else
+		class="flex flex-col space-y-3 items-center my-12"
+	>
+		<svg
+			viewBox="0 0 24 24"
+			class="h-8 w-8 sm:(h-10 w-10) title"
+			v-html="useIcon('box-select')"
+		/>
+		<p class="title">Данні відсутні</p>
+	</div>
 </template>
