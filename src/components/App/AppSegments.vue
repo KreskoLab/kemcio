@@ -62,7 +62,7 @@ watch(selected, (segment) => {
 		>
 			<button
 				ref="items"
-				class="w-full py-1.5 title font-normal"
+				class="w-full py-1.5 title font-normal text-sm sm:text-base"
 				@click="selected = segment"
 			>
 				<span>{{ segment.name }}</span>
