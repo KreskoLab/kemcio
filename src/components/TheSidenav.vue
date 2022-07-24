@@ -7,7 +7,7 @@ const userStore = useUser()
 </script>
 
 <template>
-	<nav class="fixed bottom-0 w-full py-2 px-6 sm:(pt-8 pb-12 px-2 w-20 h-full) z-20">
+	<nav class="fixed bottom-0 w-full h-16 py-2 px-6 sm:(pt-8 pb-12 px-2 w-20 h-full) z-50">
 		<router-link
 			class="hidden sm:(flex justify-center)"
 			to="/"
