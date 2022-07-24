@@ -6,7 +6,7 @@ import AppInput from '@/components/App/AppInput.vue'
 import AppDropdown from '@/components/App/Dropdown/AppDropdown.vue'
 import AppDropdownItem from '@/components/App/Dropdown/AppDropdownItem.vue'
 import { AxiosStatic } from 'axios'
-import { inject, onBeforeMount, reactive, ref } from 'vue'
+import { inject, reactive, ref } from 'vue'
 import type { Workflow } from '@/models'
 
 const axios = inject('axios') as AxiosStatic
@@ -87,7 +87,7 @@ async function getWorkflows() {
 </script>
 
 <template>
-	<div>
+	<div class="padding min-w-[360px] h-full">
 		<AppModalDelete
 			v-if="remove.status"
 			title="Видалити сценарій"
@@ -141,7 +141,7 @@ async function getWorkflows() {
 			</template>
 		</AppModal>
 
-		<div class="page flex flex-col pt-22 pb-16 px-6 lg:(pl-32 pt-8) h-full overflow-y-auto">
+		<div>
 			<div class="flex items-center space-x-5">
 				<h1 class="font-medium text-slate-700 dark:text-gray-200 text-3xl">Сценарії</h1>
 

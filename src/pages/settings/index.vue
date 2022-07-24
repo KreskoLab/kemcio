@@ -27,7 +27,7 @@ const list = ref([
 </script>
 
 <template>
-	<div class="page pt-22 pb-32 px-6 sm:(pl-28 pt-26) lg:(pl-32 pt-16 pb-4) h-full min-w-[360px] overflow-y-auto">
+	<div class="padding min-w-[360px] h-full">
 		<div class="flex flex-col space-y-6 md:(flex-row item space-x-28 space-y-0)">
 			<ul
 				class="bg-slate-50 dark:bg-dark-400 border border-gray-100 dark:border-dark-200 rounded-md px-2 py-3 space-y-2 text-gray-500 dark:text-gray-400 w-full h-max md:(w-52)"

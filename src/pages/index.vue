@@ -49,9 +49,7 @@ watch(updateCounter, async () => await getDevices())
 </script>
 
 <template>
-	<div
-		class="flex flex-col pt-22 pb-16 px-6 sm:(pl-28 pt-26) lg:(pl-32 pt-8 pb-4) min-w-[360px] h-full overflow-y-auto"
-	>
+	<div class="flex flex-col padding min-w-[360px] h-full">
 		<div class="flex items-center space-x-5">
 			<h1 class="title text-2xl sm:text-3xl">Пристрої</h1>
 
@@ -62,7 +60,7 @@ watch(updateCounter, async () => await getDevices())
 			</router-link>
 		</div>
 
-		<div class="flex flex-col items-center gap-y-12 sm:(flex-row flex-wrap items-stretch gap-x-16 my-12) my-8">
+		<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 md:gap-x-12 gap-y-12 pt-8 pb-22 lg:pb-8">
 			<AppCard
 				v-for="device in devices"
 				:id="device._id"
