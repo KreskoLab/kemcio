@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { reactive, ref, Ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { computed } from '@vue/reactivity'
@@ -119,6 +116,6 @@ function select(option: OptionModel) {
 
 <style scoped>
 ul {
-	@apply scrollbar-thin scrollbar-thumb-gray-100 scrollbar-track-gray-200 dark:scrollbar-thumb-dark-300 dark:scrollbar-track-dark-600;
+	@apply scrollbar-thin scrollbar-thumb-gray-100  dark:scrollbar-thumb-dark-300 scrollbar-track-transparent;
 }
 </style>
