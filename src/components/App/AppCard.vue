@@ -78,7 +78,7 @@ async function handleInput(element: string, value: string | number) {
 	/>
 
 	<article
-		class="flex flex-col bg-gradient-to-br dark:outline-dark-200 outline-light-600 outline rounded-md w-full lg:w-96"
+		class="flex flex-col bg-gradient-to-br dark:outline-dark-200 outline-light-600 outline rounded-md w-full"
 		:class="card.bg"
 	>
 		<div class="flex items-center space-x-2 bg-dark-800 w-max rounded-br-md px-3 py-1">
