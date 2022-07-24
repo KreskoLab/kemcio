@@ -122,129 +122,131 @@ function hideModal() {
 </script>
 
 <template>
-	<AppToast ref="toast" />
-
-	<AppModalDelete
-		v-if="remove.status"
-		title="Видалити користувача"
-		@close="remove.status = false"
-		@remove="removeUser()"
-	>
-		<p class="subtitle">Користувача {{ remove.name }} буде видалено із системи!</p>
-	</AppModalDelete>
-
-	<AppModal
-		v-if="addUser || userToUpdate.status"
-		size="lg"
-		@close="hideModal()"
-	>
-		<template #header>
-			<h1 class="title">
-				<template v-if="addUser">Новий користувач</template>
-				<template v-if="userToUpdate.status">Редагувати користувача</template>
-			</h1>
-		</template>
-
-		<template #body>
-			<AppForm
-				ref="formComponent"
-				:step="1"
-				:steps="1"
-				:schema="newUserForm"
-				@input="Object.assign(newUser, $event)"
-			/>
-		</template>
-
-		<template #footer>
-			<div class="flex justify-between mt-2">
-				<template v-if="addUser">
-					<AppButton @click="createUser()">Додати</AppButton>
-				</template>
-
-				<template v-if="userToUpdate.status">
-					<AppButton @click="updateUser()">Оновити</AppButton>
-				</template>
-			</div>
-		</template>
-	</AppModal>
-
 	<div>
-		<div class="flex items-center justify-between mb-6">
-			<h1 class="title lg:text-xl">Користувачі</h1>
+		<AppToast ref="toast" />
 
-			<AppButton
-				class="w-max"
-				size="sm"
-				@click="addUser = true"
-			>
-				<span>новий</span>
-			</AppButton>
-		</div>
+		<AppModalDelete
+			v-if="remove.status"
+			title="Видалити користувача"
+			@close="remove.status = false"
+			@remove="removeUser()"
+		>
+			<p class="subtitle">Користувача {{ remove.name }} буде видалено із системи!</p>
+		</AppModalDelete>
 
-		<div class="relative overflow-x-auto rounded-lg">
-			<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-				<thead class="title uppercase bg-purple-50/40 dark:bg-dark-200">
-					<tr>
-						<th
-							scope="col"
-							class="px-6 py-3"
-						>
-							Ім'я
-						</th>
-						<th
-							scope="col"
-							class="px-6 py-3"
-						>
-							Логін
-						</th>
+		<AppModal
+			v-if="addUser || userToUpdate.status"
+			size="lg"
+			@close="hideModal()"
+		>
+			<template #header>
+				<h1 class="title">
+					<template v-if="addUser">Новий користувач</template>
+					<template v-if="userToUpdate.status">Редагувати користувача</template>
+				</h1>
+			</template>
 
-						<th
-							scope="col"
-							class="px-6 py-3"
-						>
-							<span class="sr-only">Edit</span>
-						</th>
-					</tr>
-				</thead>
+			<template #body>
+				<AppForm
+					ref="formComponent"
+					:step="1"
+					:steps="1"
+					:schema="newUserForm"
+					@input="Object.assign(newUser, $event)"
+				/>
+			</template>
 
-				<tbody>
-					<tr
-						v-for="user in users"
-						:key="user._id"
-						class="border-b dark:bg-dark-400 dark:border-dark-400 border-gray-100 odd:bg-light-50 even:bg-purple-50/40 odd:dark:bg-dark-400 even:dark:bg-dark-200"
-					>
-						<th
-							scope="row"
-							class="px-6 py-4 title whitespace-nowrap"
-						>
-							{{ user.name }}
-						</th>
+			<template #footer>
+				<div class="flex justify-between mt-2">
+					<template v-if="addUser">
+						<AppButton @click="createUser()">Додати</AppButton>
+					</template>
 
-						<td class="px-6 py-4 subtitle">{{ user.login }}</td>
+					<template v-if="userToUpdate.status">
+						<AppButton @click="updateUser()">Оновити</AppButton>
+					</template>
+				</div>
+			</template>
+		</AppModal>
 
-						<td>
-							<div
-								v-if="user._id !== userStore._id"
-								class="flex space-x-4 sm:(justify-around space-x-0) subtitle px-6 py-4"
+		<div>
+			<div class="flex items-center justify-between mb-6">
+				<h1 class="title lg:text-xl">Користувачі</h1>
+
+				<AppButton
+					class="w-max"
+					size="sm"
+					@click="addUser = true"
+				>
+					<span>новий</span>
+				</AppButton>
+			</div>
+
+			<div class="relative overflow-x-auto rounded-lg">
+				<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+					<thead class="title uppercase bg-purple-50/40 dark:bg-dark-200">
+						<tr>
+							<th
+								scope="col"
+								class="px-6 py-3"
 							>
-								<button
-									class=""
-									@click="Object.assign(userToUpdate, { id: user._id, status: true })"
-								>
-									<i-lucide-pencil />
-								</button>
+								Ім'я
+							</th>
+							<th
+								scope="col"
+								class="px-6 py-3"
+							>
+								Логін
+							</th>
 
-								<button
-									class="transtion duration-150 hover:(text-red-400 dark:text-red-500)"
-									@click="Object.assign(remove, { id: user._id, name: user.name, status: true })"
+							<th
+								scope="col"
+								class="px-6 py-3"
+							>
+								<span class="sr-only">Edit</span>
+							</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr
+							v-for="user in users"
+							:key="user._id"
+							class="border-b dark:bg-dark-400 dark:border-dark-400 border-gray-100 odd:bg-light-50 even:bg-purple-50/40 odd:dark:bg-dark-400 even:dark:bg-dark-200"
+						>
+							<th
+								scope="row"
+								class="px-6 py-4 title whitespace-nowrap"
+							>
+								{{ user.name }}
+							</th>
+
+							<td class="px-6 py-4 subtitle">{{ user.login }}</td>
+
+							<td>
+								<div
+									v-if="user._id !== userStore._id"
+									class="flex space-x-4 sm:(justify-around space-x-0) subtitle px-6 py-4"
 								>
-									<i-lucide-trash />
-								</button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+									<button
+										class=""
+										@click="Object.assign(userToUpdate, { id: user._id, status: true })"
+									>
+										<i-lucide-pencil />
+									</button>
+
+									<button
+										class="transtion duration-150 hover:(text-red-400 dark:text-red-500)"
+										@click="Object.assign(remove, { id: user._id, name: user.name, status: true })"
+									>
+										<i-lucide-trash />
+									</button>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </template>
