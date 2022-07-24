@@ -119,6 +119,7 @@ watch(
 					wifiForm[0].value = wifi.SSId1
 					wifiForm[1].name = 'Password1'
 
+					wifiSchema.value[0] = []
 					wifiSchema.value[0].push(...wifiForm)
 				}
 
