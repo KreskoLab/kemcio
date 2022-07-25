@@ -17,7 +17,7 @@ export default defineConfig({
         IconsResolver(),
       ],
     }), 
-     Icons()
+    Icons(),
   ],
 
   dedupe: ['vue'],
