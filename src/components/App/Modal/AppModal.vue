@@ -32,7 +32,7 @@ onMounted(() => (show.value = true))
 			>
 				<div
 					v-if="show"
-					class="flex flex-col space-y-5 h-full w-full py-24 sm:(rounded-3xl pb-4 h-max) bg-light-100 dark:bg-dark-600 px-4 lg:px-8 overflow-y-auto"
+					class="flex flex-col space-y-5 h-full w-full py-24 sm:(rounded-3xl pb-4 h-max) bg-light-100 dark:bg-dark-600 px-4 lg:px-8 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dark-300 scrollbar-track-transparent scrollbar-thumb-rounded-lg"
 					:class="[
 						{ '!sm:(max-h-[320px] max-w-sm py-6)': size === 'base' },
 						{ '!sm:(max-h-[460px] w-md py-8)': size === 'md' },

@@ -3,7 +3,7 @@
 		<RouterView name="Sidenav" />
 
 		<main
-			class="page w-full h-screen lg:(min-h-screen) scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dark-300 scrollbar-track-transparent"
+			class="page w-full h-screen lg:(min-h-screen) scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dark-300 scrollbar-track-transparent scrollbar-thumb-rounded-lg"
 		>
 			<RouterView v-slot="{ Component }">
 				<template v-if="Component">

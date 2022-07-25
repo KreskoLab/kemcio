@@ -2,6 +2,9 @@
 import { defineConfig } from 'vite-plugin-windicss'
 
 export default defineConfig({
+	variants: {
+		scrollbar: ['rounded']
+	},
 	shortcuts: {
 		'page': 'dark:bg-dark-800 bg-purple-50/20',
 		'padding': 'pt-22 pb-16 px-6 sm:(pl-28 pt-26) lg:(pl-32 pt-8 pb-4)',
