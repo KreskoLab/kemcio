@@ -143,7 +143,7 @@ async function getWorkflows() {
 
 		<div>
 			<div class="flex items-center space-x-5">
-				<h1 class="font-medium text-slate-700 dark:text-gray-200 text-3xl">Сценарії</h1>
+				<h1 class="title text-2xl sm:text-3xl">Сценарії</h1>
 
 				<AppButton
 					size="sm"
