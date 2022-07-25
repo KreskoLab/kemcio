@@ -28,7 +28,7 @@ const list = ref([
 
 <template>
 	<div class="padding min-w-[360px] h-full">
-		<div class="flex flex-col space-y-6 md:(flex-row item space-x-28 space-y-0)">
+		<div class="flex flex-col space-y-6 md:(flex-row item space-x-28 space-y-0) pb-22">
 			<ul
 				class="bg-slate-50 dark:bg-dark-400 border border-gray-100 dark:border-dark-200 rounded-md px-2 py-3 space-y-2 text-gray-500 dark:text-gray-400 w-full h-max md:(w-52)"
 			>
