@@ -58,11 +58,11 @@ watch(selected, (segment) => {
 		<li
 			v-for="segment in segments"
 			:key="segment.name"
-			class="w-full h-9"
+			class="flex items-center justify-center w-full h-6 sm:h-8"
 		>
 			<button
 				ref="items"
-				class="w-full py-1.5 title font-normal text-sm sm:text-base"
+				class="w-full title font-normal text-sm sm:text-base"
 				@click="selected = segment"
 			>
 				<span>{{ segment.name }}</span>
