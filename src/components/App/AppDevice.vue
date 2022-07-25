@@ -273,7 +273,7 @@ async function getElementData(element: string) {
 					<div
 						v-for="item in deviceElements"
 						:key="item.element"
-						class="mb-4"
+						class="mb-4 max-h-[280px]"
 					>
 						<ChartLine
 							v-if="elementsData[item.element]"
@@ -282,7 +282,7 @@ async function getElementData(element: string) {
 							:chart-data="elementsData[item.element]"
 							:period="chartPeriod"
 							:width="800"
-							:height="280"
+							:height="240"
 						/>
 					</div>
 				</AppTabItem>

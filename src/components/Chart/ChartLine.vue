@@ -46,6 +46,8 @@ const themeSettings = computed(() => {
 
 const options = computed<TChartOptions<'line'>>(() => {
 	return {
+		maintainAspectRatio: false,
+		responsive: true,
 		plugins: {
 			legend: { display: false },
 			title: {
@@ -136,28 +138,30 @@ const transformedData = computed<TChartData<'line'>>(() => {
 </script>
 
 <template>
-	<Line
-		v-if="chartData.length"
-		:chart-options="options"
-		:chart-data="transformedData"
-		:chart-id="chartId"
-		:dataset-id-key="datasetIdKey"
-		:plugins="plugins"
-		:css-classes="cssClasses"
-		:styles="styles"
-		:width="width"
-		:height="height"
-	/>
-
-	<div
-		v-else
-		class="flex flex-col space-y-3 items-center my-12"
-	>
-		<svg
-			viewBox="0 0 24 24"
-			class="h-8 w-8 sm:(h-10 w-10) title"
-			v-html="useIcon('box-select')"
+	<div>
+		<Line
+			v-if="chartData.length"
+			:chart-options="options"
+			:chart-data="transformedData"
+			:chart-id="chartId"
+			:dataset-id-key="datasetIdKey"
+			:plugins="plugins"
+			:css-classes="cssClasses"
+			:styles="styles"
+			:width="width"
+			:height="height"
 		/>
-		<p class="title">Данні відсутні</p>
+
+		<div
+			v-else
+			class="flex flex-col space-y-3 items-center my-12"
+		>
+			<svg
+				viewBox="0 0 24 24"
+				class="h-8 w-8 sm:(h-10 w-10) title"
+				v-html="useIcon('box-select')"
+			/>
+			<p class="title">Данні відсутні</p>
+		</div>
 	</div>
 </template>
