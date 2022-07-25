@@ -27,7 +27,7 @@ const userStore = useUser()
 				<i-lucide-function-square class="text-2xl" />
 			</SidenavItem>
 
-			<SidenavItem to="/settings">
+			<SidenavItem to="/settings/user">
 				<i-lucide-wrench class="text-2xl" />
 			</SidenavItem>
 
