@@ -75,7 +75,7 @@ function select(option: OptionModel) {
 			>
 				<ul
 					v-if="active"
-					class="absolute z-10 mt-2 w-full max-h-40 overflow-y-auto bg-white dark:bg-dark-400 border-2 border-gray-200 dark:border-dark-200 rounded-md"
+					class="absolute z-999 mt-2 w-full max-h-40 overflow-y-auto bg-white dark:bg-dark-400 border-2 border-gray-200 dark:border-dark-200 rounded-md"
 				>
 					<li
 						v-for="option in options"
