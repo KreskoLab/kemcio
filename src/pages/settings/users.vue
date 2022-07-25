@@ -9,6 +9,7 @@ import { useUser } from '@/store/user'
 import { inject, nextTick, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
 import { AxiosStatic, AxiosError } from 'axios'
 import { useAccountForm } from '@/forms/account'
+import { ROLE } from '@/enums/role'
 
 const axios = inject('axios') as AxiosStatic
 const userStore = useUser()
@@ -41,8 +42,14 @@ watch(
 			if (user) {
 				newUserForm.value[0][0].value = user?.name
 				newUserForm.value[0][1].value = user?.login
+				newUserForm.value[0][3].value = user?.role
 				newUser.password = ''
 			}
+		} else {
+			newUserForm.value[0] = []
+
+			const form = useAccountForm()
+			newUserForm.value[0].push(...form)
 		}
 	}
 )
@@ -119,6 +126,16 @@ function hideModal() {
 	addUser.value = false
 	userToUpdate.status = false
 }
+
+function getRoleName(role: User['role']) {
+	switch (role) {
+		case ROLE.ADMIN:
+			return 'Адміністратор'
+
+		case ROLE.GUEST:
+			return 'Гість'
+	}
+}
 </script>
 
 <template>
@@ -192,11 +209,19 @@ function hideModal() {
 							>
 								Ім'я
 							</th>
+
 							<th
 								scope="col"
 								class="px-6 py-3"
 							>
 								Логін
+							</th>
+
+							<th
+								scope="col"
+								class="px-6 py-3"
+							>
+								Роль
 							</th>
 
 							<th
@@ -222,6 +247,8 @@ function hideModal() {
 							</th>
 
 							<td class="px-6 py-4 subtitle">{{ user.login }}</td>
+
+							<td class="px-6 py-4 subtitle">{{ getRoleName(user.role) }}</td>
 
 							<td>
 								<div
