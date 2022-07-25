@@ -62,3 +62,10 @@ onMounted(() => (show.value = true))
 		</div>
 	</Teleport>
 </template>
+
+<style scoped>
+::-webkit-scrollbar-track {
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+</style>
