@@ -6,7 +6,7 @@ import { OptionModel } from '@/models/option-model'
 
 const props = defineProps<{
 	label?: string
-	placeholder: string
+	placeholder?: string
 	options: Array<OptionModel>
 	modelValue?: object | string | number | boolean
 	error?: boolean
