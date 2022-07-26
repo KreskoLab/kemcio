@@ -3,7 +3,7 @@ import { computed } from '@vue/reactivity'
 import { onMounted, provide, ref, useSlots, watch } from 'vue'
 
 const props = defineProps<{
-	modelValue: number
+	modelValue?: number
 }>()
 
 const emit = defineEmits<{
@@ -27,7 +27,7 @@ onMounted(() => {
 
 watch(
 	() => props.modelValue,
-	(val) => selectTab(val)
+	(val) => selectTab(val as number)
 )
 
 provide('activeTab', activeTab)
