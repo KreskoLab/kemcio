@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SidenavItem from '@/components/SidenavItem.vue'
-import AppColorToggle from '@/components/App/AppColorToggle.vue'
+import ColorToggle from '@/components/ColorToggle.vue'
 import { useUser } from '@/store/user'
 
 const userStore = useUser()
@@ -39,7 +39,7 @@ const userStore = useUser()
 			</SidenavItem>
 
 			<div class="hidden mt-2 lg:(block)">
-				<AppColorToggle />
+				<ColorToggle />
 			</div>
 		</div>
 	</nav>

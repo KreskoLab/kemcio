@@ -10,7 +10,7 @@
 			/>
 		</router-link>
 
-		<AppColorToggle />
+		<ColorToggle />
 	</header>
 </template>
 
