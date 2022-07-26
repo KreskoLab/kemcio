@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from '@vue/reactivity'
-import { onMounted, provide, ref, useSlots } from 'vue'
+import { onMounted, provide, ref, useSlots, watch } from 'vue'
 
 const props = defineProps<{
 	modelValue: number
@@ -24,6 +24,11 @@ onMounted(() => {
 	if (props.modelValue) selectTab(props.modelValue)
 	else selectTab(0)
 })
+
+watch(
+	() => props.modelValue,
+	(val) => selectTab(val)
+)
 
 provide('activeTab', activeTab)
 </script>
