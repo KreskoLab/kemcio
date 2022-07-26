@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 const props = defineProps<{
 	modelValue: string
-	disabled: boolean
+	disabled?: boolean
 }>()
 
 const emit = defineEmits<{

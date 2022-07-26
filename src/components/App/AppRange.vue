@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
-	modelValue: number
-	disabled: boolean
+	modelValue?: number
+	disabled?: boolean
 }>()
 
 defineEmits<{
@@ -12,7 +12,7 @@ defineEmits<{
 <template>
 	<div>
 		<input
-			class="appearance-none w-full bg-dark-100 dark:bg-dark-400 h-1 rounded-full scrollbar-thumb-yellow-600"
+			class="appearance-none w-full bg-dark-100 dark:bg-dark-400 h-1 rounded-full"
 			type="range"
 			min="0"
 			max="100"
