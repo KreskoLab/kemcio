@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { describe, beforeEach, it, expect } from '@jest/globals'
+import { describe, beforeEach, it, expect, jest } from '@jest/globals'
 import { shallowMount, VueWrapper } from '@vue/test-utils'
 import AppSelect from '@/components/App/AppSelect.vue'
+import ILucideChevronDown from '~icons/lucide/chevron-down'
+
+jest.mock(
+	'~icons/lucide/chevron-down',
+	() => {
+		return {}
+	},
+	{ virtual: true }
+)
 
 describe('AppSelect', () => {
 	let wrapper: VueWrapper<InstanceType<typeof AppSelect>>
@@ -19,6 +28,11 @@ describe('AppSelect', () => {
 						value: 'option-2',
 					},
 				],
+			},
+			global: {
+				components: {
+					'i-lucide-chevron-down': ILucideChevronDown,
+				},
 			},
 		})
 	})
