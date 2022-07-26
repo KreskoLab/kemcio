@@ -12,14 +12,14 @@
 				<slot name="icon" />
 			</div>
 
-			<div
+			<button
 				v-if="password"
 				class="absolute inset-y-3 right-3 dark:text-gray-400 text-gray-400 cursor-pointer"
 				@click="showPassword()"
 			>
 				<i-lucide-eye v-if="inputType === 'password'" />
 				<i-lucide-eye-off v-else />
-			</div>
+			</button>
 
 			<input
 				class="w-full bg-white dark:bg-dark-400 text-gray-600 dark:text-gray-200 border-3 border-gray-200 dark:border-dark-200 transition duration-150 focus:(outline-none border-purple-300 dark:border-purple-300) py-2 pl-3 text-sm rounded-md"
@@ -55,11 +55,8 @@
 	</div>
 </template>
 
-<script
-	setup
-	lang="ts"
->
-import { ref, Ref } from 'vue'
+<script setup lang="ts">
+import { ref, Ref, watch } from 'vue'
 
 const props = defineProps<{
 	label?: string
@@ -80,4 +77,9 @@ const updateValue = (e: Event) => {
 
 const inputType = ref(props.password ? 'password' : 'text')
 const showPassword = () => (inputType.value = inputType.value === 'password' ? 'text' : 'password')
+
+watch(
+	() => props.password,
+	(val) => (inputType.value = val ? 'password' : 'text')
+)
 </script>
