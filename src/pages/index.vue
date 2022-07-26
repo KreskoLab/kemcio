@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { Device } from '@/models'
 import AppButton from '@/components/App/AppButton.vue'
-import AppCard from '@/components/App/AppCard.vue'
+import DeviceCard from '@/components/Device/DeviceCard.vue'
 import { AxiosStatic } from 'axios'
 import { inject, reactive, watch } from 'vue'
-import type { Device } from '@/models'
 import { useMain } from '@/store/main'
 import { computed } from '@vue/reactivity'
 
@@ -61,7 +61,7 @@ watch(updateCounter, async () => await getDevices())
 		</div>
 
 		<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 md:gap-x-12 gap-y-12 pt-8 pb-22 lg:pb-8">
-			<AppCard
+			<DeviceCard
 				v-for="device in devices"
 				:id="device._id"
 				:key="device._id"
