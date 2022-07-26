@@ -12,11 +12,12 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"lib": ["esnext", "dom"],
-		"types": ["vite/client", "@types/w3c-web-serial"],
+		"types": ["vite/client", "@types/w3c-web-serial", "unplugin-icons/types/vue"],
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["src/*"]
-		}
+		},
+		
 	},
 	"include": [
 		"src/**/*.ts",
