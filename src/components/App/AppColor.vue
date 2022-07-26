@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { computed } from 'vue'
 
 const props = defineProps<{
@@ -27,6 +24,7 @@ const color = computed({
 <template>
 	<div>
 		<input
+			class="appearance-none w-9 h-9 border-none bg-transparent"
 			type="color"
 			:value="color"
 			:disabled="disabled"
@@ -35,3 +33,10 @@ const color = computed({
 		/>
 	</div>
 </template>
+
+<style scoped>
+input[type='color']::-webkit-color-swatch {
+	border: 3px #fdfdfd solid;
+	border-radius: 50%;
+}
+</style>
