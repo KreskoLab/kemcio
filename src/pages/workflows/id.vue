@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import TheSidebar from '@/components/TheSidebar.vue'
 import AppButton from '@/components/App/AppButton.vue'
 import { VueFlow, BackgroundVariant, Background, useVueFlow, Node, EdgeMouseEvent } from '@braks/vue-flow'
@@ -59,9 +56,8 @@ async function saveBlocks() {
 	}
 }
 
-function onEdgeClick(event: MouseEvent) {
-	const handledEvent = event as unknown as EdgeMouseEvent
-	removeEdges([handledEvent.edge.id])
+function onEdgeClick(event: EdgeMouseEvent) {
+	removeEdges([event.edge.id])
 }
 
 function onDrop(event: DragEvent) {
