@@ -50,7 +50,7 @@ watch(updateCounter, async () => await getDevices())
 </script>
 
 <template>
-	<div class="flex flex-col padding min-w-[360px] h-full">
+	<div class="flex flex-col padding min-w-[360px] h-full lg:pr-12">
 		<div class="flex items-center space-x-5">
 			<h1 class="title text-2xl sm:text-3xl">Пристрої</h1>
 
