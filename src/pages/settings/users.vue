@@ -3,18 +3,16 @@ import AppButton from '@/components/App/AppButton.vue'
 import AppForm from '@/components/App/AppForm.vue'
 import AppModal from '@/components/App/Modal/AppModal.vue'
 import AppModalDelete from '@/components/App/Modal/AppModalDelete.vue'
-import AppToast from '@/components/App/AppToast.vue'
 import type { FormItem, User } from '@/models'
 import { useUser } from '@/store/user'
 import { inject, nextTick, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
 import { AxiosStatic, AxiosError } from 'axios'
 import { useAccountForm } from '@/forms/account'
 import { ROLE } from '@/enums/role'
+import { useToast } from '@/composables/toast'
 
 const axios = inject('axios') as AxiosStatic
 const userStore = useUser()
-
-const toast = ref<InstanceType<typeof AppToast>>()
 
 const remove = reactive({ id: '', name: '', status: false })
 const userToUpdate = reactive({ id: '', status: false })
@@ -115,11 +113,11 @@ async function updateUser() {
 
 function addErrorToast(error: any) {
 	const err = error as AxiosError
-	toast.value?.add(err.response?.data, 'error')
+	useToast(err.response?.data, 'error')
 }
 
 function addSuccessToast(message: string) {
-	toast.value?.add(message, 'success')
+	useToast(message, 'success')
 }
 
 function hideModal() {
@@ -140,8 +138,6 @@ function getRoleName(role: User['role']) {
 
 <template>
 	<div>
-		<AppToast ref="toast" />
-
 		<AppModalDelete
 			v-if="remove.status"
 			title="Видалити користувача"
