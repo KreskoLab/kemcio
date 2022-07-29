@@ -7,13 +7,14 @@ import AppSpinner from '@/components//App/AppSpinner.vue'
 import AppForm from '@/components/App/AppForm.vue'
 import AppSegments from '@/components/App/AppSegments.vue'
 import ChartLine from '@/components/Chart/ChartLine.vue'
-import { AxiosStatic } from 'axios'
+import { AxiosError, AxiosStatic } from 'axios'
 import { useDeviceForm, usePinForm, useWiFiForm } from '@/forms'
 import { useIcon } from '@/composables/get-icon'
 import type { FormItem, Device, DeviceType, DeviceElement, ElementsData, Period, ModalSize } from '@/models'
 import { inject, onBeforeMount, reactive, ref, watch } from 'vue'
 import { ElementData } from '@braks/vue-flow'
 import { useMain } from '@/store/main'
+import { useToast } from '@/composables/toast'
 
 interface WiFi {
 	SSId1: string
@@ -156,17 +157,39 @@ async function getWiFi() {
 
 async function updateDevice() {
 	if (Object.keys(mainForm).length) {
-		await axios.put(`/devices/${props.id}`, mainForm).then(() => mainStore.updateCounter())
+		try {
+			await axios.put(`/devices/${props.id}`, mainForm)
+
+			mainStore.updateCounter()
+			useToast('Пристрій оновлен', 'success')
+		} catch (error) {
+			const err = error as AxiosError
+			useToast(err.response?.data, 'error')
+		}
 	}
 }
 
 async function removeDevice() {
-	await axios.delete(`/devices/${props.id}`).then(() => mainStore.updateCounter())
+	try {
+		await axios.delete(`/devices/${props.id}`)
+
+		mainStore.updateCounter()
+		useToast('Пристрій видален', 'success')
+	} catch (error) {
+		const err = error as AxiosError
+		useToast(err.response?.data, 'error')
+	}
 }
 
 async function updateWiFi() {
 	if (Object.keys(wifiForm).length) {
-		await axios.put(`/devices/${props.id}/wifi`, wifiForm)
+		try {
+			await axios.put(`/devices/${props.id}/wifi`, wifiForm)
+			useToast('Данны WiFi оновлено', 'success')
+		} catch (error) {
+			const err = error as AxiosError
+			useToast(err.response?.data, 'error')
+		}
 	}
 }
 

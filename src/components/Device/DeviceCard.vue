@@ -7,7 +7,8 @@ import DeviceInfo from '@/components/Device/DeviceInfo.vue'
 import type { DeviceType, DeviceElement } from '@/models'
 import { computed, ref } from 'vue'
 import { useIcon } from '@/composables/get-icon'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
+import { useToast } from '@/composables/toast'
 
 const props = defineProps<{
 	id: string
@@ -55,10 +56,15 @@ const card = computed(() => {
 })
 
 async function handleInput(element: string, value: string | number) {
-	await axios.post(`/devices/${props.id}/command`, {
-		name: element,
-		value,
-	})
+	await axios
+		.post(`/devices/${props.id}/command`, {
+			name: element,
+			value,
+		})
+		.catch((error) => {
+			const err = error as AxiosError
+			useToast(err.response?.data, 'error')
+		})
 }
 </script>
 
