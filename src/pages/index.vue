@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Device } from '@/models'
+import type { Device, Message } from '@/models'
 import AppButton from '@/components/App/AppButton.vue'
 import DeviceCard from '@/components/Device/DeviceCard.vue'
 import { AxiosStatic } from 'axios'
@@ -29,17 +29,18 @@ function listenDevices() {
 	const sse = new EventSource(`${import.meta.env.VITE_API}/devices/status`)
 
 	sse.onmessage = (event: MessageEvent) => {
-		const msg = JSON.parse(event.data)
-		const deviceId = event.lastEventId
-
-		const device = devices.find((item) => item._id === deviceId)
+		const { id, ...rest }: Message = JSON.parse(event.data)
+		const device = devices.find((item) => item._id === id)
 
 		if (device) {
-			if (Array.isArray(msg)) {
-				device.elements = msg
-			} else {
-				Object.assign(device, msg)
+			if ('online' in rest) {
+				device.online = rest.online
 				devices.sort(({ online }) => (online ? -1 : 1))
+			} else {
+				const element = device.elements.find((item) => item.element === rest.element)
+
+				if (element) element.value = rest.value
+				else device.elements.push(rest)
 			}
 		}
 	}
