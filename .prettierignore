@@ -11,3 +11,9 @@ tsconfig.json
 windi.config.ts
 .eslintrc.js
 prettier.config.js
+dist
+.vscode
+README.md
+vercel.json
+yarn.lock
+.github
