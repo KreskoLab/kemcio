@@ -8,23 +8,26 @@ import { useUser } from '@/store/user'
 import { inject, nextTick, onMounted, reactive, ref } from 'vue'
 import { FormItem } from '@/models'
 import { useAccountForm } from '@/forms/account'
-import { AxiosStatic } from 'axios'
+import { AxiosError, AxiosStatic } from 'axios'
+import { useToast } from '@/composables/toast'
 
 const axios = inject('axios') as AxiosStatic
 const userStore = useUser()
 
-const { name, login, _id } = userStore
+const { user } = userStore
 
 const accountForm = ref<FormItem[][]>([[]])
-const accountFormComponent = ref<InstanceType<typeof AppForm> | null>(null)
-let account: { [key: string]: string } = reactive({})
+const userForm = ref<InstanceType<typeof AppForm> | null>(null)
+
+const account: { [key: string]: string } = reactive({})
 
 onMounted(() => {
 	const form = useAccountForm()
 
-	form[0].value = name
-	form[1].value = login
+	form[0].value = user.name
+	form[1].value = user.login
 	form[2].placeholder = 'Новий пароль'
+	form[3].value = user.role
 
 	accountForm.value[0].push(...form)
 })
@@ -37,12 +40,20 @@ async function updateUser() {
 		await nextTick()
 	}
 
-	if (accountFormComponent.value?.validateForm()) {
-		await axios.put(`/users/${_id}`, account).then(() => {
+	if (userForm.value?.validateForm()) {
+		try {
+			await axios.put(`/users/${user._id}`, account)
+			await userStore.getUser()
+
 			accountForm.value[0][2].validations = useAccountForm()[2].validations
-			accountFormComponent.value?.resetValidation()
-			userStore.getUser()
-		})
+			userForm.value?.resetValidation()
+
+			useToast('Дані оновлені', 'success')
+
+		} catch (error) {
+			const err = error as AxiosError
+			useToast(err.response?.data, 'error')
+		}
 	}
 }
 </script>
@@ -52,7 +63,7 @@ async function updateUser() {
 		<h1 class="title lg:text-xl mb-6">Налаштування користувача</h1>
 
 		<AppForm
-			ref="accountFormComponent"
+			ref="userForm"
 			:step="1"
 			:steps="1"
 			:schema="accountForm"
