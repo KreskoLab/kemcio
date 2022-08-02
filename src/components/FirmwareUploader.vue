@@ -95,7 +95,7 @@ await axios
 	})
 	.then((res) => (firmware.value = res.data))
 
-const socket = new WebSocket(import.meta.env.VITE_WS_ULR)
+const socket = new WebSocket(import.meta.env.VITE_WS_URL)
 
 socket.addEventListener('open', function () {
 	socket.send(
