@@ -1,13 +1,18 @@
 import { defineStore } from 'pinia'
 import axios, { AxiosError } from 'axios'
 import router from '@/router'
+import type { User } from '@/models'
+import { ROLE } from '@/enums/role'
 
 export const useUser = defineStore('user', {
 	state: () => {
 		return {
-			_id: '',
-			name: '',
-			login: '',
+			user: {
+				_id: '',
+				name: '',
+				login: '',
+				role: ROLE.GUEST
+			} as User,
 			accessToken: '',
 			loggedIn: false,
 		}
@@ -44,13 +49,8 @@ export const useUser = defineStore('user', {
 		},
 
 		async getUser() {
-			await axios
-				.post('/auth/me')
-				.then((res) => {
-					this._id = res.data._id
-					this.name = res.data.name
-					this.login = res.data.login
-
+			await axios.post<User>('/auth/me').then((res) => {
+					this.user = res.data
 					this.setLoggedIn(true)
 				})
 				.catch(() => {
