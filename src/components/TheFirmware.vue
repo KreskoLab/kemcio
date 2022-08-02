@@ -1,6 +1,4 @@
 <template>
-	<AppToast ref="toast" />
-
 	<div class="flex justify-center items-center relative w-full h-42 rounded-lg bg-white dark:bg-dark-800">
 		<div
 			v-if="loading"
@@ -49,7 +47,6 @@
 </template>
 
 <script setup lang="ts">
-import AppToast from '@/components/App/AppToast.vue'
 import { ESPLoader } from 'esp-web-flasher'
 import { inject, onBeforeUnmount, reactive, ref } from 'vue'
 import { Device } from '@/models'
@@ -80,7 +77,6 @@ const emit = defineEmits<{
 }>()
 
 const axios = inject('axios') as AxiosStatic
-const toast = ref<InstanceType<typeof AppToast> | null>(null)
 
 const loading = ref(false)
 const progress = ref(0)
@@ -188,10 +184,10 @@ async function flash() {
 			loading.value = false
 			progress.value = 0
 
-			useToast(toast, 'error', 'Пристрій не відповідає')
+			useToast('Пристрій не відповідає', 'error')
 		}
 	} catch (error) {
-		useToast(toast, 'error', 'Пристрій не знайдено')
+		useToast('Пристрій не знайдено', 'error')
 	}
 }
 
