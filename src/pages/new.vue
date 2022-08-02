@@ -18,7 +18,7 @@
 				v-if="step > steps"
 				class="flex justify-center w-10/12 my-6 md:(w-8/12 my-8)"
 			>
-				<TheFirmware
+				<FirmwareUploader
 					:pin="form.pin"
 					:gpio="form.device.gpio"
 					:interval="form.interval"
@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import AppSteps from '@/components/App/AppSteps.vue'
-import TheFirmware from '@/components/TheFirmware.vue'
+import FirmwareUploader from '@/components/FirmwareUploader.vue'
 import AppForm from '@/components/App/AppForm.vue'
 import { AxiosStatic } from 'axios'
 import type { Vendor, VendorDevice, FormItem } from '@/models'
