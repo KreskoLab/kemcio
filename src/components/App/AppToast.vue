@@ -47,19 +47,20 @@ defineExpose({ add })
 				>
 					<div class="flex items-center space-x-3 w-full sm:(max-w-72) py-3 px-4 form">
 						<i-lucide-alert-circle
-							class="w-6 h-6 flex-shrink-0"
-							:class="[
-								{
-									'text-red-400': toast.type === 'error',
-								},
-								{
-									'text-amber-400': toast.type === 'warn',
-								},
-								{
-									'text-green-400': toast.type === 'success',
-								},
-							]"
+							v-if="toast.type === 'error'"
+							class="w-6 h-6 flex-shrink-0 text-red-400"
 						/>
+
+						<i-lucide-alert-triangle
+							v-if="toast.type === 'warn'"
+							class="w-6 h-6 flex-shrink-0 text-amber-400"
+						/>
+
+						<i-lucide-check-circle
+							v-if="toast.type === 'success'"
+							class="w-6 h-6 flex-shrink-0 text-green-400"
+						/>
+
 						<span class="title text-base font-normal">{{ toast.message }}</span>
 					</div>
 				</li>
