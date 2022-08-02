@@ -248,7 +248,7 @@ function getRoleName(role: User['role']) {
 
 							<td>
 								<div
-									v-if="user._id !== userStore._id"
+									v-if="user._id !== userStore.user._id"
 									class="flex space-x-4 sm:(justify-around) subtitle px-6 py-4"
 								>
 									<button
