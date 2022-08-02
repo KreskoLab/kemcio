@@ -41,10 +41,7 @@
 	</div>
 </template>
 
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import AppSelect from '@/components/App/AppSelect.vue'
 import AppInput from '@/components/App/AppInput.vue'
 import useVuelidate from '@vuelidate/core'

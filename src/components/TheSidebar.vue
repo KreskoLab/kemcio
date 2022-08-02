@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import AppBlock from '@/components/App/AppBlock.vue'
 import type { Block } from '@/models'
 import { useBlocks } from '@/store/blocks'

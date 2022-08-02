@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { useIcon } from '@/composables/get-icon'
 
 defineProps<{

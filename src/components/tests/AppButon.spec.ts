@@ -1,5 +1,4 @@
 import { describe, beforeEach, it, expect, test } from '@jest/globals'
-import {} from '@jest/core'
 import { shallowMount, VueWrapper } from '@vue/test-utils'
 import AppButton from '@/components/App/AppButton.vue'
 

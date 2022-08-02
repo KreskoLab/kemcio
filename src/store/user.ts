@@ -11,7 +11,7 @@ export const useUser = defineStore('user', {
 				_id: '',
 				name: '',
 				login: '',
-				role: ROLE.GUEST
+				role: ROLE.GUEST,
 			} as User,
 			accessToken: '',
 			loggedIn: false,
@@ -49,7 +49,9 @@ export const useUser = defineStore('user', {
 		},
 
 		async getUser() {
-			await axios.post<User>('/auth/me').then((res) => {
+			await axios
+				.post<User>('/auth/me')
+				.then((res) => {
 					this.user = res.data
 					this.setLoggedIn(true)
 				})

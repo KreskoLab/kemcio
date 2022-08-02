@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import type { ValidConnectionFunc } from '@braks/vue-flow'
 import NodeHandler from '@/components/Node/NodeHandler.vue'
 import Node from '@/components/Node/Node.vue'

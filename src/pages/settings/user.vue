@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import AppButton from '@/components/App/AppButton.vue'
 import AppForm from '@/components/App/AppForm.vue'
 import { useUser } from '@/store/user'
@@ -49,7 +46,6 @@ async function updateUser() {
 			userForm.value?.resetValidation()
 
 			useToast('Дані оновлені', 'success')
-
 		} catch (error) {
 			const err = error as AxiosError
 			useToast(err.response?.data, 'error')

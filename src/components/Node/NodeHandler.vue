@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import type { ValidConnectionFunc } from '@braks/vue-flow'
 import { Handle, Position } from '@braks/vue-flow'
 
