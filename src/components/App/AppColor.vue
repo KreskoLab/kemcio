@@ -24,7 +24,7 @@ const color = computed({
 <template>
 	<div>
 		<input
-			class="appearance-none w-9 h-9 border-none bg-transparent"
+			class="appearance-none w-14 h-9 border-none bg-transparent"
 			type="color"
 			:value="color"
 			:disabled="disabled"
@@ -37,6 +37,6 @@ const color = computed({
 <style scoped>
 input[type='color']::-webkit-color-swatch {
 	border: 3px #fdfdfd solid;
-	border-radius: 50%;
+	border-radius: 10px;
 }
 </style>
